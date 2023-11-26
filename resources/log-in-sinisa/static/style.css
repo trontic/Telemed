@@ -13,10 +13,25 @@ body{
     padding: 40px 30px 40px 40px;
 }
 
+.table{
+    cursor: pointer;
+}
+
+#patients th {
+    background-color: #2b98af;
+    color: white;
+    font-weight: 1;
+}
+
+#patients td {
+    color: #6E6E6E;
+}
+
+
+
 @media only screen and (max-width: 768px){
 
     .box-area{
         margin: 0 10px
     }
-
 }
