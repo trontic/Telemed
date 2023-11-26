@@ -17,6 +17,10 @@ body{
     cursor: pointer;
 }
 
+.h3{
+    color: #6e6e6e;
+}
+
 #patients th {
     background-color: #2b98af;
     color: white;
