@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap');
+
+body{
+    font-family: 'Poppins', sans-serif;
+    background: #ececec;
+}
+
+.box-area{
+    width: 930px;
+}
+
+.right-box{
+    padding: 40px 30px 40px 40px;
+}
+
+.table{
+    cursor: pointer;
+}
+
+#patients th {
+    background-color: #2b98af;
+    color: white;
+    font-weight: 1;
+}
+
+#patients td {
+    color: #6E6E6E;
+}
+
+
+
+@media only screen and (max-width: 768px){
+
+    .box-area{
+        margin: 0 10px
+    }
+}
