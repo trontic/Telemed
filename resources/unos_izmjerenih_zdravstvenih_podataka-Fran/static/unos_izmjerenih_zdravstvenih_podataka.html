@@ -2,9 +2,76 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="unos_izmjerenih_zdravstvenih_podataka.css">
+    <title>Unos izmjerenih zdravstvenih podataka</title>
 </head>
 <body>
+
+<div class="container mt-3 p-5 d-flex justify-content-center align-items-center">
+    <div class="row justify-content-center border rounded-4 p-5 bg-white shadow box-area">
+        <div class="col-md-12">
+            <div class="row mb-2">
+                <div class="col-1">
+                    <img src="../../images/back.png" class="img" style="width: 45px;">
+                </div>
+                <div class="col-1">
+                    <img src="../../images/home.png" class="img" style="width: 45px;">
+                </div>
+                <div class="col-1 ms-auto mb-4">
+                    <img src="../../images/exit.png" class="img" style="width: 45px;">
+                </div>
+            </div>
+            <h3>Unos izmjerenih zdravstvenih podataka</h3>
+            <form>
+                <div class="row mt-5 mb-4">
+                    <div class="col-3">
+                        <label for="sistolicki_tlak" class="col-form-label">Tlak (sistolički):</label>
+                    </div>
+                    <div class="col-9">
+                        <input type="number" class="form-control" id="sistolicki_tlak" placeholder="Unesite izmjereni sistolički tlak">
+                    </div>
+                </div>
+                <div class="row mt-4 mb-4">
+                    <div class="col-3">
+                        <label for="dijastolicki_tlak" class="col-form-label">Tlak (dijastolički):</label>
+                    </div>
+                    <div class="col-9">
+                        <input type="number" class="form-control" id="dijastolicki_tlak" placeholder="Unesite izmjereni dijastolički tlak">
+                    </div>
+                </div>
+                <div class="row mt-4 mb-4">
+                    <div class="col-3">
+                        <label for="otkucaji_srca" class="col-form-label">Otkucaji srca po minuti:</label>
+                    </div>
+                    <div class="col-9">
+                        <input type="number" class="form-control" id="otkucaji_srca" placeholder="Unesite izmjereni broj otkucaja srca u minuti">
+                    </div>
+                </div>
+                <div class="row mt-4 mb-4">
+                    <div class="col-3">
+                        <label for="tjelesna_temperatura" class="col-form-label">Otkucaji srca po minuti:</label>
+                    </div>
+                    <div class="col-9">
+                        <input type="number" class="form-control" id="tjelesna_temperatura" placeholder="Unesite izmjerenu tjelesnu temperaturu">
+                    </div>
+                </div>
+                <div class="row mt-4 mb-4">
+                    <div class="col-3">
+                        <label for="biljeska" class="col-form-label">Bilješka (opcionalno):</label>
+                    </div>
+                    <div class="col-9">
+                        <textarea class="form-control" id="biljeska" placeholder="Ako imate kakvu napomenu o svojem trenutnom stanju, upišite ovdje"></textarea>
+                    </div>
+                </div>
+                <div class="input-group mt-5">
+                    <button class="btn btn-og btn-primary w-100 fs-6">Spremi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
