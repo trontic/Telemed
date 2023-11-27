@@ -13,6 +13,10 @@ h3{
     color: #6e6e6e;
 }
 
+p{
+    color: #6e6e6e;
+}
+
 @media only screen and (max-width: 768px){
     .box-area{
         margin: 0 10px
