@@ -17,8 +17,13 @@ body{
     cursor: pointer;
 }
 
-.h3{
+h3{
     color: #6e6e6e;
+}
+
+a{
+    text-decoration: none;
+    color: inherit;
 }
 
 #patients th {
