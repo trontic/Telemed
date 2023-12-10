@@ -13,9 +13,6 @@ body{
     padding: 40px 30px 40px 40px;
 }
 
-.table{
-    cursor: pointer;
-}
 
 h3{
     color: #6e6e6e;
@@ -36,8 +33,6 @@ a{
     color: #6E6E6E;
 }
 
-
-
 @media only screen and (max-width: 768px){
 
     .box-area{
@@ -48,4 +43,3 @@ a{
 #biljeska{
     height:100px;
 }
-
