@@ -9,12 +9,12 @@ public class User {
     private int type = 0;
     private String fname;
     private String lname;
-    private Date birthday;
+    private String birthday;
     private int mbo;
     private String email;
     private String password;
 
-    public User(String fname, String lname, Date birthday, int mbo, String email, String password) {
+    public User(String fname, String lname, String birthday, int mbo, String email, String password) {
         this.fname = fname;
         this.lname = lname;
         this.birthday = birthday;
@@ -65,11 +65,11 @@ public class User {
         this.lname = lname;
     }
 
-    public Date getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 
