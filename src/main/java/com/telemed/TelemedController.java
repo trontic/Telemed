@@ -29,6 +29,8 @@ public class TelemedController {
 
     public TelemedController() {
 
+        Record r = new Record(122, 81, 85, 36, "", "10.12.2023.");
+
         User u = new User("Zdravko", "Zdravić","01.01.1980.",11111111, "zdravko@gmail.com","zdravko");
         u.setType(1);
         userList.add(u);
@@ -113,8 +115,21 @@ public class TelemedController {
         return "redirect:/patients";
     }
 
+    @GetMapping("/records")
+    public String records() {
+        return "patient_home_lucija_lucic.html";
+    }
 
+    @GetMapping("/addNewRecord")
+    String addNewRecord(@RequestParam("sysPressure") int sysPressure, @RequestParam("diasPressure") int diasPressure, @RequestParam("heartRate") int heartRate, @RequestParam("bodyTemperature") float bodyTemperature, @RequestParam("note") String note, @RequestParam("date") String date) {
+        recordList.add(new Record(sysPressure, diasPressure, heartRate, bodyTemperature, note, date));
+        return "redirect:/records";
+    }
 
+    @GetMapping("/patientNewData")
+    public String patientNewData() {
+        return "patient_new_data.html";
+    }
 
 
 

@@ -9,9 +9,9 @@ public class Record {
     private int heartRate;
     private float bodyTemperature;
     private String note;
-    private Date date;
+    private String date;
 
-    public Record(int sysPressure, int diasPressure, int heartRate, float bodyTemperature, String note, Date date) {
+    public Record(int sysPressure, int diasPressure, int heartRate, float bodyTemperature, String note, String date) {
         this.sysPressure = sysPressure;
         this.diasPressure = diasPressure;
         this.heartRate = heartRate;
@@ -60,11 +60,11 @@ public class Record {
         this.note = note;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 }
