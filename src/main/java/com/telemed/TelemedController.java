@@ -27,9 +27,20 @@ public class TelemedController {
         return patientList;
     }
 
+    List<Record> getRecordList() {
+        List<Record> recordList1 = new ArrayList<>();
+        for (Record r : recordList) {
+            recordList1.add(r);
+        }
+        return recordList1;
+    }
+
     public TelemedController() {
 
-        Record r = new Record(122, 81, 85, 36, "", "10.12.2023.");
+        Record r = new Record(122, 81, 85, 36, "", "10.12.2023.", "07:44");
+        recordList.add(r);
+
+        recordList.add(new Record(125, 76, 80,35,"", "11.12.2023", "18:30"));
 
         User u = new User("Zdravko", "Zdravić","01.01.1980.",11111111, "zdravko@gmail.com","zdravko");
         u.setType(1);
@@ -65,7 +76,9 @@ public class TelemedController {
     }
 
     @GetMapping("/addNewPatient")
-    String addNewUser(@RequestParam("fname") String fname, @RequestParam("lname") String lname, @RequestParam("birthday") String birthday, @RequestParam("mbo") int mbo, @RequestParam("email") String email, @RequestParam("password") String password) {
+    String addNewUser(@RequestParam("fname") String fname, @RequestParam("lname") String lname,
+                      @RequestParam("birthday") String birthday, @RequestParam("mbo") int mbo,
+                      @RequestParam("email") String email, @RequestParam("password") String password) {
         userList.add(new User(fname, lname, birthday, mbo, email, password));
         return "redirect:/patients";
     }
@@ -76,7 +89,8 @@ public class TelemedController {
     }
 
     @GetMapping("/loginProcess")
-    public String loginProcess(@RequestParam("email") String email, @RequestParam("password") String password, Model model){
+    public String loginProcess(@RequestParam("email") String email,
+                               @RequestParam("password") String password, Model model){
         User user = null;
         for (User u : userList) {
             if (u.getEmail().equals(email) && u.getPassword().equals(password)) {
@@ -116,13 +130,20 @@ public class TelemedController {
     }
 
     @GetMapping("/records")
-    public String records() {
+    public String records(Model model) {
+        model.addAttribute(getRecordList());
         return "patient_home_lucija_lucic.html";
     }
 
     @GetMapping("/addNewRecord")
-    String addNewRecord(@RequestParam("sysPressure") int sysPressure, @RequestParam("diasPressure") int diasPressure, @RequestParam("heartRate") int heartRate, @RequestParam("bodyTemperature") float bodyTemperature, @RequestParam("note") String note, @RequestParam("date") String date) {
-        recordList.add(new Record(sysPressure, diasPressure, heartRate, bodyTemperature, note, date));
+    String addNewRecord(@RequestParam("sysPressure") int sysPressure,
+                        @RequestParam("diasPressure") int diasPressure,
+                        @RequestParam("heartRate") int heartRate,
+                        @RequestParam("bodyTemperature") float bodyTemperature,
+                        @RequestParam("note") String note,
+                        @RequestParam("date") String date,
+                        @RequestParam("time") String time) {
+        recordList.add(new Record(sysPressure, diasPressure, heartRate, bodyTemperature, note, date, time));
         return "redirect:/records";
     }
 

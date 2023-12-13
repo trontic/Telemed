@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -85,95 +85,14 @@
                 </tr>
                 </thead>
                 <tbody class="table-group-divider">
-                <tr>
-                    <td>1.</td>
-                    <td>22.11.2023.</td>
-                    <td>07:32</td>
-                    <td>122</td>
-                    <td>82</td>
-                    <td>85</td>
-                    <td>36.5</td>
-                </tr>
-                <tr>
-                    <td>2.</td>
-                    <td>22.11.2023.</td>
-                    <td>19:42</td>
-                    <td>118</td>
-                    <td>85</td>
-                    <td>82</td>
-                    <td>36.3</td>
-                </tr>
-                <tr>
-                    <td>3.</td>
-                    <td>23.11.2023.</td>
-                    <td>07:00</td>
-                    <td>130</td>
-                    <td>75</td>
-                    <td>80</td>
-                    <td>36.2</td>
-                </tr>
-                <tr>
-                    <td>4.</td>
-                    <td>23.11.2023.</td>
-                    <td>20:32</td>
-                    <td>120</td>
-                    <td>80</td>
-                    <td>86</td>
-                    <td>36.7</td>
-                </tr>
-                <tr>
-                    <td>5.</td>
-                    <td>24.11.2023.</td>
-                    <td>07:15</td>
-                    <td>125</td>
-                    <td>81</td>
-                    <td>79</td>
-                    <td>36.2</td>
-                </tr>
-                <tr>
-                    <td>6.</td>
-                    <td>24.11.2023.</td>
-                    <td>18:59</td>
-                    <td>127</td>
-                    <td>88</td>
-                    <td>81</td>
-                    <td>36.8</td>
-                </tr>
-                <tr>
-                    <td>7.</td>
-                    <td>25.11.2023.</td>
-                    <td>08:15</td>
-                    <td>121</td>
-                    <td>81</td>
-                    <td>83</td>
-                    <td>36.7</td>
-                </tr>
-                <tr>
-                    <td>8.</td>
-                    <td>25.11.2023.</td>
-                    <td>18:50</td>
-                    <td>122</td>
-                    <td>81</td>
-                    <td>83</td>
-                    <td>36.8</td>
-                </tr>
-                <tr>
-                    <td>9.</td>
-                    <td>26.11.2023.</td>
-                    <td>07:59</td>
-                    <td>127</td>
-                    <td>82</td>
-                    <td>77</td>
-                    <td>36.6</td>
-                </tr>
-                <tr>
-                    <td>10.</td>
-                    <td>26.11.2023.</td>
-                    <td>18:33</td>
-                    <td>120</td>
-                    <td>85</td>
-                    <td>85</td>
-                    <td>36.9</td>
+                <tr th:each="record : ${recordList}">
+                    <td th:text="${record.id}">Primjer</td>
+                    <td th:text="${record.date}">Primjer</td>
+                    <td th:text="${record.time}">Primjer</td>
+                    <td th:text="${record.sysPressure}">Primjer</td>
+                    <td th:text="${record.diasPressure}">Primjer</td>
+                    <td th:text="${record.heartRate}">Primjer</td>
+                    <td th:text="${record.bodyTemperature}">Primjer</td>
                 </tr>
                 </tbody>
             </table>

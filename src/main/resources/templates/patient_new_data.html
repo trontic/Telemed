@@ -55,7 +55,7 @@
                         <label for="bodyTemperature" class="col-form-label">Tjelesna temperatura:</label>
                     </div>
                     <div class="col-9">
-                        <input type="number" class="form-control" id="bodyTemperature" name="bodyTemperature" placeholder="Unesite izmjerenu tjelesnu temperaturu">
+                        <input type="number" step="any" class="form-control" id="bodyTemperature" name="bodyTemperature" placeholder="Unesite izmjerenu tjelesnu temperaturu">
                     </div>
                 </div>
                 <div class="row mt-4 mb-4">
@@ -64,6 +64,22 @@
                     </div>
                     <div class="col-9">
                         <textarea class="form-control" id="note" name="note" placeholder="Ako imate kakvu napomenu o svojem trenutnom stanju, upišite ovdje"></textarea>
+                    </div>
+                </div>
+                <div class="row mt-4 mb-4">
+                    <div class="col-3">
+                        <label for="date" class="col-form-label">Datum:</label>
+                    </div>
+                    <div class="col-9">
+                        <input type="date" class="form-control" id="date" name="date">
+                    </div>
+                </div>
+                <div class="row mt-4 mb-4">
+                    <div class="col-3">
+                        <label for="time" class="col-form-label">Vrijeme:</label>
+                    </div>
+                    <div class="col-9">
+                        <input type="time" class="form-control" id="time" name="time">
                     </div>
                 </div>
                 <div class="input-group mt-5">
