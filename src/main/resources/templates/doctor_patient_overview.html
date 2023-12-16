@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,25 +25,25 @@
                     </a>
                 </div>
                 <div class="col-1 ms-auto me-5">
-                    <button onclick="window.location.href='login' class="btn btn-outline-danger" type="button">Odjava</button>
+                    <button onclick="window.location.href='login'" class="btn btn-outline-danger" type="button">Odjava</button>
                 </div>
             </div>
             <h3>Pregled povijesti zapisa pacijenta</h3>
             <form class="row mb-2">
                 <div class="row">
                     <div class="col-2 mb-2">
-                        <label for="name" class="col-form-label">Ime:</label>
+                        <label for="fname" class="col-form-label">Ime:</label>
                     </div>
                     <div class="col-auto mb-2">
-                        <input type="text" class="form-control" id="name" placeholder="Lucija" disabled>
+                        <input th:value="${user.fname}" type="text" class="form-control" id="fname" name="fname" disabled>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-2 mb-2">
-                        <label for="surname" class="form-label">Prezime:</label>
+                        <label for="lname" class="form-label">Prezime:</label>
                     </div>
                     <div class="col-auto mb-2">
-                        <input type="text" class="form-control" id="surname" placeholder="Lucić" disabled>
+                        <input th:value="${user.lname}" type="text" class="form-control" id="lname" name="lname" disabled>
                     </div>
                 </div>
                 <div class="row">
@@ -51,7 +51,7 @@
                         <label for="birthday" class="form-label">Datum rođenja:</label>
                     </div>
                     <div class="col-auto mb-2">
-                        <input type="text" class="form-control" id="birthday" placeholder="21.08.1967." disabled>
+                        <input th:value="${user.birthday}" type="text" class="form-control" id="birthday" name="birthday" disabled>
                     </div>
                 </div >
                 <div class="row">
@@ -59,17 +59,10 @@
                         <label for="mbo" class="form-label">MBO:</label>
                     </div>
                     <div class="col-auto mb-2">
-                        <input type="text" class="form-control" id="mbo" placeholder="42424242" disabled>
+                        <input th:value="${user.mbo}" type="text" class="form-control" id="mbo" name="mbo" disabled>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-2 mb-2">
-                        <label for="date" class="form-label">Datum:</label>
-                    </div>
-                    <div class="col-auto mb-2">
-                        <input type="date" class="form-control" id="date" placeholder="">
-                    </div>
-                </div>
+
             </form>
             <table id="patients" class="table table-md table-borderless table-hover align-middle">
                 <thead>
@@ -84,95 +77,14 @@
                 </tr>
                 </thead>
                 <tbody class="table-group-divider">
-                <tr>
-                    <td>1.</td>
-                    <td>22.11.2023.</td>
-                    <td>07:32</td>
-                    <td>122</td>
-                    <td>82</td>
-                    <td>85</td>
-                    <td>36.5</td>
-                </tr>
-                <tr>
-                    <td>2.</td>
-                    <td>22.11.2023.</td>
-                    <td>19:42</td>
-                    <td>118</td>
-                    <td>85</td>
-                    <td>82</td>
-                    <td>36.3</td>
-                </tr>
-                <tr>
-                    <td>3.</td>
-                    <td>23.11.2023.</td>
-                    <td>07:00</td>
-                    <td>130</td>
-                    <td>75</td>
-                    <td>80</td>
-                    <td>36.2</td>
-                </tr>
-                <tr>
-                    <td>4.</td>
-                    <td>23.11.2023.</td>
-                    <td>20:32</td>
-                    <td>120</td>
-                    <td>80</td>
-                    <td>86</td>
-                    <td>36.7</td>
-                </tr>
-                <tr>
-                    <td>5.</td>
-                    <td>24.11.2023.</td>
-                    <td>07:15</td>
-                    <td>125</td>
-                    <td>81</td>
-                    <td>79</td>
-                    <td>36.2</td>
-                </tr>
-                <tr>
-                    <td>6.</td>
-                    <td>24.11.2023.</td>
-                    <td>18:59</td>
-                    <td>127</td>
-                    <td>88</td>
-                    <td>81</td>
-                    <td>36.8</td>
-                </tr>
-                <tr>
-                    <td>7.</td>
-                    <td>25.11.2023.</td>
-                    <td>08:15</td>
-                    <td>121</td>
-                    <td>81</td>
-                    <td>83</td>
-                    <td>36.7</td>
-                </tr>
-                <tr>
-                    <td>8.</td>
-                    <td>25.11.2023.</td>
-                    <td>18:50</td>
-                    <td>122</td>
-                    <td>81</td>
-                    <td>83</td>
-                    <td>36.8</td>
-                </tr>
-                <tr>
-                    <td>9.</td>
-                    <td>26.11.2023.</td>
-                    <td>07:59</td>
-                    <td>127</td>
-                    <td>82</td>
-                    <td>77</td>
-                    <td>36.6</td>
-                </tr>
-                <tr>
-                    <td>10.</td>
-                    <td>26.11.2023.</td>
-                    <td>18:33</td>
-                    <td>120</td>
-                    <td>85</td>
-                    <td>85</td>
-                    <td>36.9</td>
+                <tr th:each="record : ${recordList}">
+                    <td th:value="${record.id}">Primjer</td>
+                    <td th:value="${record.date}">Primjer</td>
+                    <td th:value="${record.time}">Primjer</td>
+                    <td th:value="${record.sysPressure}">Primjer</td>
+                    <td th:value="${record.diasPressure}">Primjer</td>
+                    <td th:value="${record.heartRate}">Primjer</td>
+                    <td th:value="${record.bodyTemperature}">Primjer</td>
                 </tr>
                 </tbody>
             </table>

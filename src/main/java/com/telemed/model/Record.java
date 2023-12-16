@@ -1,4 +1,4 @@
-package com.telemed;
+package com.telemed.model;
 
 import java.util.Date;
 
@@ -10,16 +10,14 @@ public class Record {
     private int diasPressure;
     private int heartRate;
     private float bodyTemperature;
-    private String note;
     private String date;
     private String time;
 
-    public Record(int sysPressure, int diasPressure, int heartRate, float bodyTemperature, String note, String date, String time) {
+    public Record(int sysPressure, int diasPressure, int heartRate, float bodyTemperature, String date, String time) {
         this.sysPressure = sysPressure;
         this.diasPressure = diasPressure;
         this.heartRate = heartRate;
         this.bodyTemperature = bodyTemperature;
-        this.note = note;
         this.date = date;
         this.time = time;
 
@@ -56,14 +54,6 @@ public class Record {
 
     public void setBodyTemperature(float bodyTemperature) {
         this.bodyTemperature = bodyTemperature;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
     }
 
     public String getDate() {

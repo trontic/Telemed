@@ -1,6 +1,4 @@
-package com.telemed;
-
-import java.util.Date;
+package com.telemed.model;
 
 public class User {
 

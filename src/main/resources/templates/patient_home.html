@@ -25,18 +25,19 @@
                     </a>
                 </div>
                 <div class="col-auto ms-auto">
-                    <button onclick="window.location.href='patientNewData'" class="btn btn-outline-primary" type="button">Dodaj novi zapis</button>
+                    <button onclick="window.location.href='patientNewRecord'" class="btn btn-outline-primary" type="button">Dodaj novi zapis</button>
                     <button onclick="window.location.href='login'" class="btn btn-outline-danger" type="button">Odjava</button>
                 </div>
             </div>
             <h3>Pregled povijesti zapisa pacijenta</h3>
             <form class="row mb-2">
+                <input type="hidden" name="userId" th:value="${id}" />
                 <div class="row">
                     <div class="col-2 mb-2">
                         <label for="name" class="col-form-label">Ime:</label>
                     </div>
                     <div class="col-auto mb-2">
-                        <input type="text" class="form-control" id="name" placeholder="Lucija" disabled>
+                        <input type="text" class="form-control" id="name" disabled>
                     </div>
                 </div>
                 <div class="row">
@@ -44,7 +45,7 @@
                         <label for="surname" class="form-label">Prezime:</label>
                     </div>
                     <div class="col-auto mb-2">
-                        <input type="text" class="form-control" id="surname" placeholder="Lucić" disabled>
+                        <input type="text" class="form-control" id="surname" disabled>
                     </div>
                 </div>
                 <div class="row">
@@ -52,7 +53,7 @@
                         <label for="birthday" class="form-label">Datum rođenja:</label>
                     </div>
                     <div class="col-auto mb-2">
-                        <input type="text" class="form-control" id="birthday" placeholder="21.08.1967." disabled>
+                        <input type="text" class="form-control" id="birthday" disabled>
                     </div>
                 </div >
                 <div class="row">
@@ -60,15 +61,7 @@
                         <label for="mbo" class="form-label">MBO:</label>
                     </div>
                     <div class="col-auto mb-2">
-                        <input type="text" class="form-control" id="mbo" placeholder="42424242" disabled>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-2 mb-2">
-                        <label for="date" class="form-label">Datum:</label>
-                    </div>
-                    <div class="col-auto mb-2">
-                        <input type="date" class="form-control" id="date" placeholder="">
+                        <input type="text" class="form-control" id="mbo" disabled>
                     </div>
                 </div>
             </form>
@@ -82,6 +75,8 @@
                     <th>Tlak - dijastolički</th>
                     <th>Otkucaji srca</th>
                     <th>Tjelesna temperatura</th>
+                    <th>Uredi</th>
+                    <th>Obriši</th>
                 </tr>
                 </thead>
                 <tbody class="table-group-divider">
@@ -93,6 +88,8 @@
                     <td th:text="${record.diasPressure}">Primjer</td>
                     <td th:text="${record.heartRate}">Primjer</td>
                     <td th:text="${record.bodyTemperature}">Primjer</td>
+                    <td><a th:href="@{'/showEditRecord?id='+ ${record.id}}"><img src="images/edit.png" class="img-fluid" style="width: 20px;"></a></td>
+                    <td><a th:href="@{'/deleteRecord?id='+ ${record.id}}"><img src="images/trash_can.png" class="img-fluid" style="width: 20px;"></a></td>
                 </tr>
                 </tbody>
             </table>

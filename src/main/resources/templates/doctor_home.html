@@ -62,9 +62,9 @@
                     <td th:text="${user.mbo}">Primjer</td>
                     <td th:text="${user.email}">Primjer</td>
                     <td th:text="${user.password}">Primjer</td>
-                    <td><a th:href="@{'/edit?mbo='+ ${user.mbo}}"><img src="images/edit.png" class="img-fluid" style="width: 20px;"></a></td>
-                    <td><a th:href="@{'/delete?mbo='+ ${user.mbo}}"><img src="images/trash_can.png" class="img-fluid" style="width: 20px;"></a></td>
-                    <td><a th:href="@{'/view?mbo='+ ${user.mbo}}"><img src="images/view.png" class="img-fluid" style="width: 20px;"></a></td>
+                    <td><a th:href="@{'/showEditPatient?id='+ ${user.id}}"><img src="images/edit.png" class="img-fluid" style="width: 20px;"></a></td>
+                    <td><a th:href="@{'/deleteUser?id='+ ${user.id}}"><img src="images/trash_can.png" class="img-fluid" style="width: 20px;"></a></td>
+                    <td><a th:href="@{'/showPatientOverview?id='+ ${user.id}}"><img src="images/view.png" class="img-fluid" style="width: 20px;"></a></td>
                 </tr>
                 </tbody>
             </table>
