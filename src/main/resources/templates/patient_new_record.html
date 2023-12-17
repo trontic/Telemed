@@ -42,7 +42,7 @@
                         <label for="sysPressure" class="col-form-label">Tlak (sistolički):</label>
                     </div>
                     <div class="col-9">
-                        <input type="number" class="form-control" id="sysPressure" name="sysPressure" placeholder="Unesite izmjereni sistolički tlak (mmHg)">
+                        <input type="number" class="form-control" id="sysPressure" name="sysPressure" placeholder="Unesite izmjereni sistolički tlak (mmHg)" min="70" max="200" required>
                     </div>
                 </div>
                 <div class="row mt-4 mb-4">
@@ -50,7 +50,7 @@
                         <label for="diasPressure" class="col-form-label">Tlak (dijastolički):</label>
                     </div>
                     <div class="col-9">
-                        <input type="number" class="form-control" id="diasPressure" name="diasPressure" placeholder="Unesite izmjereni dijastolički tlak (mmHg)">
+                        <input type="number" class="form-control" id="diasPressure" name="diasPressure" placeholder="Unesite izmjereni dijastolički tlak (mmHg)" min="45" max="120" required>
                     </div>
                 </div>
                 <div class="row mt-4 mb-4">
@@ -58,7 +58,7 @@
                         <label for="heartRate" class="col-form-label">Otkucaji srca po minuti:</label>
                     </div>
                     <div class="col-9">
-                        <input type="number" class="form-control" id="heartRate" name="heartRate" placeholder="Unesite izmjereni broj otkucaja srca u minuti">
+                        <input type="number" class="form-control" id="heartRate" name="heartRate" placeholder="Unesite izmjereni broj otkucaja srca (u minuti)" min="50" max="110" required>
                     </div>
                 </div>
                 <div class="row mt-4 mb-4">
@@ -66,7 +66,7 @@
                         <label for="bodyTemperature" class="col-form-label">Tjelesna temperatura:</label>
                     </div>
                     <div class="col-9">
-                        <input type="number" step="any" class="form-control" id="bodyTemperature" name="bodyTemperature" placeholder="Unesite izmjerenu tjelesnu temperaturu (°C)">
+                        <input type="number" step="any" class="form-control" id="bodyTemperature" name="bodyTemperature" placeholder="Unesite izmjerenu tjelesnu temperaturu (°C)" min="35" max="42" required>
                     </div>
                 </div>
                 <div class="row mt-4 mb-4">

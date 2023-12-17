@@ -42,7 +42,7 @@
                             <label for="fname" class="col-form-label">Ime:</label>
                         </div>
                         <div class="col-9">
-                            <input th:value="${user.fname}" type="text" class="form-control" id="fname" name="fname" >
+                            <input th:value="${user.fname}" type="text" class="form-control" id="fname" name="fname" pattern="[a-zA-ZčćžšđČĆŽŠĐ-]+" required>
                         </div>
                     </div>
                     <div class="row mt-4 mb-4">
@@ -50,7 +50,7 @@
                             <label for="lname" class="col-form-label">Prezime:</label>
                         </div>
                         <div class="col-9">
-                            <input th:value="${user.lname}" type="text" class="form-control" id="lname" name="lname" >
+                            <input th:value="${user.lname}" type="text" class="form-control" id="lname" name="lname" pattern="[a-zA-ZčćžšđČĆŽŠĐ-]+" required>
                         </div>
                     </div>
                     <div class="row mt-4 mb-4">
@@ -58,7 +58,7 @@
                             <label for="birthday" class="col-form-label">Datum rođenja:</label>
                         </div>
                         <div class="col-9">
-                            <input th:value="${user.birthday}" type="date" class="form-control" id="birthday" name="birthday">
+                            <input th:value="${user.birthday}" type="date" class="form-control" id="birthday" name="birthday" min="1900-01-01" max="2023-01-01" required>
                         </div>
                     </div>
                     <div class="row mt-4 mb-4">
@@ -66,7 +66,7 @@
                             <label for="mbo" class="col-form-label">MBO:</label>
                         </div>
                         <div class="col-9">
-                            <input th:value="${user.mbo}" type="number" class="form-control" id="mbo" name="mbo" >
+                            <input th:value="${user.mbo}" type="number" class="form-control" id="mbo" name="mbo" min="100000000" max="999999999" required>
                         </div>
                     </div>
                     <div class="row mt-4 mb-4">
@@ -74,7 +74,7 @@
                             <label for="email" class="col-form-label">Email:</label>
                         </div>
                         <div class="col-9">
-                            <input th:value="${user.email}" type="email" class="form-control" id="email" name="email" >
+                            <input th:value="${user.email}" type="email" class="form-control" id="email" name="email" pattern="(\w\.?)+@[\w\.-]+\.\w{2,}" required>
                         </div>
                     </div>
                     <div class="row mt-4 mb-4">
@@ -82,7 +82,7 @@
                             <label for="password" class="col-form-label">Password:</label>
                         </div>
                         <div class="col-9">
-                            <input th:value="${user.password}" type="password" class="form-control" id="password" name="password" >
+                            <input th:value="${user.password}" type="password" class="form-control" id="password" name="password" minlength="3" required>
                             <input th:value="${user.id}" name="id" hidden>
                         </div>
                     </div>

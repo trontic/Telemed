@@ -42,7 +42,7 @@
                             <label for="fname" class="col-form-label">Ime:</label>
                         </div>
                         <div class="col-9">
-                            <input type="text" class="form-control" id="fname" name="fname" placeholder="Unesite ime pacijenta">
+                            <input type="text" class="form-control" id="fname" name="fname" placeholder="Unesite ime pacijenta" pattern="[a-zA-ZčćžšđČĆŽŠĐ-]+" required>
                         </div>
                     </div>
                     <div class="row mt-4 mb-4">
@@ -50,7 +50,7 @@
                             <label for="lname" class="col-form-label">Prezime:</label>
                         </div>
                         <div class="col-9">
-                            <input type="text" class="form-control" id="lname" name="lname" placeholder="Unesite prezime pacijenta">
+                            <input type="text" class="form-control" id="lname" name="lname" placeholder="Unesite prezime pacijenta" pattern="[a-zA-ZčćžšđČĆŽŠĐ-]+" required>
                         </div>
                     </div>
                     <div class="row mt-4 mb-4">
@@ -58,7 +58,7 @@
                             <label for="birthday" class="col-form-label">Datum rođenja:</label>
                         </div>
                         <div class="col-9">
-                            <input type="date" class="form-control" id="birthday" name="birthday" placeholder="Unesite datum rođenja pacijenta">
+                            <input type="date" class="form-control" id="birthday" name="birthday" placeholder="Unesite datum rođenja pacijenta" min="1900-01-01" max="2023-01-01" required>
                         </div>
                     </div>
                     <div class="row mt-4 mb-4">
@@ -66,7 +66,7 @@
                             <label for="mbo" class="col-form-label">MBO:</label>
                         </div>
                         <div class="col-9">
-                            <input type="number" class="form-control" id="mbo" name="mbo" placeholder="Unesite MBO pacijenta">
+                            <input type="number" class="form-control" id="mbo" name="mbo" placeholder="Unesite MBO pacijenta" min="100000000" max="999999999" required>
                         </div>
                     </div>
                     <div class="row mt-4 mb-4">
@@ -74,7 +74,7 @@
                             <label for="email" class="col-form-label">Email:</label>
                         </div>
                         <div class="col-9">
-                            <input type="email" class="form-control" id="email" name="email" placeholder="Unesite email pacijenta">
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Unesite email pacijenta" pattern="(\w\.?)+@[\w\.-]+\.\w{2,}" required>
                         </div>
                     </div>
                     <div class="row mt-4 mb-4">
@@ -82,7 +82,7 @@
                             <label for="password" class="col-form-label">Password:</label>
                         </div>
                         <div class="col-9">
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Unesite lozinku pacijenta">
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Unesite lozinku pacijenta" minlength="3" required>
                         </div>
                     </div>
                     <div class="input-group mt-5">
