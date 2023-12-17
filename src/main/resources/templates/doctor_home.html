@@ -41,9 +41,9 @@
                 </div>
             </div>
             <h3>Lista pacijenata</h3>
-            <form class="row">
-                <div class="col-auto mb-2 ms-auto">
-                    <input class="form-control" type="search" placeholder="Pretražite pacijente" aria-label="Search">
+            <form action="/searchPatient" class="row">
+                <div class="col-5 mb-2 ms-auto">
+                    <input th:text="${lname}" class="form-control" type="search" name="lname" placeholder="Pretražite pacijente po prezimenu" aria-label="Search">
                 </div>
                 <div class="col-auto mb-2 me-auto">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Pretraživanje</button>

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
+;
 import java.util.List;
 import java.util.Optional;
 
@@ -170,6 +170,12 @@ public class TelemedController {
         return "redirect:/records";
     }
 
+    @GetMapping("/searchPatient")
+    public String searchPatient(@RequestParam("lname") String lname, Model model) {
+        model.addAttribute(userRepository.findByLname(lname));
+        model.addAttribute("currentUser", currentUser);
+        return "doctor_home.html";
+    }
 
 
 }

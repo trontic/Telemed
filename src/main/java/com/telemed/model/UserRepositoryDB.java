@@ -12,4 +12,10 @@ public interface UserRepositoryDB extends CrudRepository<User, Integer> {
     List<User> findByType(int type);
 
     User findUserById(int id);
+
+    List<User> findByFnameAndLname(String fname, String lname);
+
+    List<User> findByLname(String lname);
+
+    List<User> findByFname(String fname);
 }
