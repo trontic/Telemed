@@ -1,9 +1,12 @@
 package com.telemed.model;
 
-import java.util.Date;
+import jakarta.persistence.*;
 
+@Entity
 public class Record {
 
+    @Id
+    @GeneratedValue
     private int id;
     static int idCounter = 0;
     private int sysPressure;
@@ -13,16 +16,26 @@ public class Record {
     private String date;
     private String time;
 
-    public Record(int sysPressure, int diasPressure, int heartRate, float bodyTemperature, String date, String time) {
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public Record() {
+
+    }
+
+    public Record(int sysPressure, int diasPressure, int heartRate, float bodyTemperature, String date, String time, User user) {
         this.sysPressure = sysPressure;
         this.diasPressure = diasPressure;
         this.heartRate = heartRate;
         this.bodyTemperature = bodyTemperature;
         this.date = date;
         this.time = time;
+        this.user = user;
 
         id = idCounter++;
     }
+
 
     public int getSysPressure() {
         return sysPressure;
@@ -78,5 +91,13 @@ public class Record {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

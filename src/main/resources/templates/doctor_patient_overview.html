@@ -13,6 +13,17 @@
 <div class="container mt-3 p-5 d-flex justify-content-center align-items-center ">
     <div class="row justify-content-center border rounded-4 p-5 bg-white shadow box-area">
         <div class="col-md-12">
+            <div class="row p-3 mb-2 bg-success text-white">
+                <div class="col-auto me-auto">
+                    <h4>Telemed</h4>
+                    <span>Administrativno sučelje</span>
+                </div>
+                <div class="col-auto ms-auto">
+                    <span>Administrator: dr.</span>
+                    <span th:text="${currentUser.getFname()}"></span>
+                    <span th:text="${currentUser.getLname()}"></span>
+                </div>
+            </div>
             <div class="row mb-2">
                 <div class="col-1">
                     <a href="patients">
@@ -78,13 +89,13 @@
                 </thead>
                 <tbody class="table-group-divider">
                 <tr th:each="record : ${recordList}">
-                    <td th:value="${record.id}">Primjer</td>
-                    <td th:value="${record.date}">Primjer</td>
-                    <td th:value="${record.time}">Primjer</td>
-                    <td th:value="${record.sysPressure}">Primjer</td>
-                    <td th:value="${record.diasPressure}">Primjer</td>
-                    <td th:value="${record.heartRate}">Primjer</td>
-                    <td th:value="${record.bodyTemperature}">Primjer</td>
+                    <td th:text="${record.id}">Primjer</td>
+                    <td th:text="${record.date}">Primjer</td>
+                    <td th:text="${record.time}">Primjer</td>
+                    <td th:text="${record.sysPressure}">Primjer</td>
+                    <td th:text="${record.diasPressure}">Primjer</td>
+                    <td th:text="${record.heartRate}">Primjer</td>
+                    <td th:text="${record.bodyTemperature}">Primjer</td>
                 </tr>
                 </tbody>
             </table>

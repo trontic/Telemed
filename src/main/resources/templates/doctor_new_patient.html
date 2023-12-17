@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +13,17 @@
     <div class="container mt-3 p-5 d-flex justify-content-center align-items-center">
         <div class="row justify-content-center border rounded-4 p-5 bg-white shadow box-area">
             <div class="col-md-12">
+                <div class="row p-3 mb-2 bg-success text-white">
+                    <div class="col-auto me-auto">
+                        <h4>Telemed</h4>
+                        <span>Administrativno sučelje</span>
+                    </div>
+                    <div class="col-auto ms-auto">
+                        <span>Administrator: dr.</span>
+                        <span th:text="${currentUser.getFname()}"></span>
+                        <span th:text="${currentUser.getLname()}"></span>
+                    </div>
+                </div>
                 <div class="row mb-2">
                     <div class="col-1">
                         <a href="patients"><img src="images/back.png" class="img" style="width: 45px;"></a>

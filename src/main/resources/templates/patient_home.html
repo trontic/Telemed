@@ -13,6 +13,17 @@
 <div class="container mt-3 p-5 d-flex justify-content-center align-items-center ">
     <div class="row justify-content-center border rounded-4 p-5 bg-white shadow box-area">
         <div class="col-md-12">
+            <div class="row p-3 mb-2 bg-secondary text-white">
+                <div class="col-auto me-auto">
+                    <h4>Telemed</h4>
+                    <span>Dnevnik tlaka</span>
+                </div>
+                <div class="col-auto ms-auto">
+                    <span>Korisnik: </span>
+                    <span th:text="${currentUser.getFname()}"></span>
+                    <span th:text="${currentUser.getLname()}"></span>
+                </div>
+            </div>
             <div class="row mb-2">
                 <div class="col-1">
                     <a href="records">
@@ -25,27 +36,27 @@
                     </a>
                 </div>
                 <div class="col-auto ms-auto">
+
                     <button onclick="window.location.href='patientNewRecord'" class="btn btn-outline-primary" type="button">Dodaj novi zapis</button>
                     <button onclick="window.location.href='login'" class="btn btn-outline-danger" type="button">Odjava</button>
                 </div>
             </div>
             <h3>Pregled povijesti zapisa pacijenta</h3>
             <form class="row mb-2">
-                <input type="hidden" name="userId" th:value="${id}" />
                 <div class="row">
                     <div class="col-2 mb-2">
-                        <label for="name" class="col-form-label">Ime:</label>
+                        <label for="fname" class="col-form-label">Ime:</label>
                     </div>
                     <div class="col-auto mb-2">
-                        <input type="text" class="form-control" id="name" disabled>
+                        <input th:value="${currentUser.fname}" type="text" class="form-control" id="fname" name="fname" disabled>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-2 mb-2">
-                        <label for="surname" class="form-label">Prezime:</label>
+                        <label for="lname" class="form-label">Prezime:</label>
                     </div>
                     <div class="col-auto mb-2">
-                        <input type="text" class="form-control" id="surname" disabled>
+                        <input th:value="${currentUser.lname}" type="text" class="form-control" id="lname" name="lname" disabled>
                     </div>
                 </div>
                 <div class="row">
@@ -53,7 +64,7 @@
                         <label for="birthday" class="form-label">Datum rođenja:</label>
                     </div>
                     <div class="col-auto mb-2">
-                        <input type="text" class="form-control" id="birthday" disabled>
+                        <input th:value="${currentUser.birthday}"type="text" class="form-control" id="birthday" name="birthday" disabled>
                     </div>
                 </div >
                 <div class="row">
@@ -61,7 +72,7 @@
                         <label for="mbo" class="form-label">MBO:</label>
                     </div>
                     <div class="col-auto mb-2">
-                        <input type="text" class="form-control" id="mbo" disabled>
+                        <input th:value="${currentUser.mbo}" type="text" class="form-control" id="mbo" name="mbo" disabled>
                     </div>
                 </div>
             </form>

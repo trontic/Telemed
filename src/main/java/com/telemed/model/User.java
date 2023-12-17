@@ -1,7 +1,13 @@
 package com.telemed.model;
 
-public class User {
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 
+@Entity(name="APP_USER")
+public class User {
+    @Id
+    @GeneratedValue
     private int id;
     static int idCounter = 0;
     private int type = 0;
@@ -12,6 +18,9 @@ public class User {
     private String email;
     private String password;
 
+    public User() {
+
+    }
     public User(String fname, String lname, String birthday, int mbo, String email, String password) {
         this.fname = fname;
         this.lname = lname;
