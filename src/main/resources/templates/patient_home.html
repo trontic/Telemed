@@ -79,7 +79,6 @@
             <table id="patients" class="table table-md table-borderless table-hover align-middle">
                 <thead>
                 <tr>
-                    <th>R.br.</th>
                     <th>Datum</th>
                     <th>Vrijeme</th>
                     <th>Tlak - sistolički (mmHg)</th>
@@ -92,7 +91,6 @@
                 </thead>
                 <tbody class="table-group-divider text-nowrap">
                 <tr th:each="record : ${recordList}">
-                    <td th:text="${record.id}">Primjer</td>
                     <td th:text="${record.date}">Primjer</td>
                     <td th:text="${record.time}">Primjer</td>
                     <td th:text="${record.sysPressure}">Primjer</td>

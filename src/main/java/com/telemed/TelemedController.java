@@ -7,10 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
+
 import java.util.List;
 import java.util.Optional;
 
@@ -43,7 +41,7 @@ public class TelemedController {
     @GetMapping("/addNewPatient")
     String addNewUser(@RequestParam("fname") String fname, @RequestParam("lname") String lname,
                       @RequestParam("birthday") String birthday, @RequestParam("mbo") int mbo,
-                      @RequestParam("email") String email, @RequestParam("password") String password, Model model) throws ParseException {
+                      @RequestParam("email") String email, @RequestParam("password") String password, Model model) {
         userRepository.save(new User(fname, lname, birthday, mbo, email, password));
         return "redirect:/patients";
     }
@@ -57,7 +55,7 @@ public class TelemedController {
     }
 
     @GetMapping("/editPatient")
-    String editUser(int id, String fname, String lname, String birthday, int mbo, String email, String password, Model model) throws ParseException {
+    String editUser(int id, String fname, String lname, String birthday, int mbo, String email, String password, Model model) {
         User user = userRepository.findUserById(id);
         user.setFname(fname);
         user.setLname(lname);
@@ -83,6 +81,11 @@ public class TelemedController {
 
     @GetMapping("/login")
     public String login() {
+        return "login.html";
+    }
+
+    @GetMapping("/")
+    public String home() {
         return "login.html";
     }
 
@@ -131,7 +134,7 @@ public class TelemedController {
 
     @GetMapping("/addNewRecord")
     String addNewRecord( int sysPressure, int diasPressure, int heartRate, float bodyTemperature,
-                         String date, String time, User user) throws ParseException {
+                         String date, String time, User user) {
         Record newRecord = new Record(sysPressure, diasPressure, heartRate, bodyTemperature, date, time, user);
         newRecord.setUser(currentUser);
         recordRepository.save(newRecord);
@@ -159,7 +162,7 @@ public class TelemedController {
     }
 
     @GetMapping("/editRecord")
-    String editRecord(int id, int sysPressure, int diasPressure, int heartRate, float bodyTemperature, String date, String time) throws ParseException {
+    String editRecord(int id, int sysPressure, int diasPressure, int heartRate, float bodyTemperature, String date, String time) {
         Record record = recordRepository.findRecordById(id);
         record.setId(id);
         record.setSysPressure(sysPressure);
@@ -180,6 +183,7 @@ public class TelemedController {
         return "doctor_home.html";
     }
 
+
     /*
     public String reformatDate(String dateToReformat) throws ParseException {
 
@@ -189,8 +193,8 @@ public class TelemedController {
         return sdf.format(d);
 
     }
+    */
 
-     */
 
 
 }

@@ -52,7 +52,6 @@
             <table id="patients" class="table table-md table-borderless table-hover align-middle">
                 <thead>
                 <tr>
-                    <th>R.br.</th>
                     <th>Ime</th>
                     <th>Prezime</th>
                     <th>Datum rođenja</th>
@@ -66,7 +65,6 @@
                 </thead>
                 <tbody class="table-group-divider text-nowrap">
                 <tr th:each="user : ${userList}">
-                    <td th:text="${user.id}">Primjer</td>
                     <td th:text="${user.fname}">Primjer</td>
                     <td th:text="${user.lname}">Primjer</td>
                     <td th:text="${user.birthday}">Primjer</td>
