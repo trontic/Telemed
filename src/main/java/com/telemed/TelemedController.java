@@ -25,7 +25,6 @@ public class TelemedController {
     RecordRepositoryDB recordRepository;
 
 
-
     public TelemedController() {
 
     }
