@@ -44,7 +44,6 @@ public class TelemedController {
     String addNewUser(@RequestParam("fname") String fname, @RequestParam("lname") String lname,
                       @RequestParam("birthday") String birthday, @RequestParam("mbo") int mbo,
                       @RequestParam("email") String email, @RequestParam("password") String password, Model model) throws ParseException {
-        birthday = reformatDate(birthday);
         userRepository.save(new User(fname, lname, birthday, mbo, email, password));
         return "redirect:/patients";
     }
@@ -59,7 +58,6 @@ public class TelemedController {
 
     @GetMapping("/editPatient")
     String editUser(int id, String fname, String lname, String birthday, int mbo, String email, String password, Model model) throws ParseException {
-        birthday = reformatDate(birthday);
         User user = userRepository.findUserById(id);
         user.setFname(fname);
         user.setLname(lname);
@@ -134,7 +132,6 @@ public class TelemedController {
     @GetMapping("/addNewRecord")
     String addNewRecord( int sysPressure, int diasPressure, int heartRate, float bodyTemperature,
                          String date, String time, User user) throws ParseException {
-        date = reformatDate(date);
         Record newRecord = new Record(sysPressure, diasPressure, heartRate, bodyTemperature, date, time, user);
         newRecord.setUser(currentUser);
         recordRepository.save(newRecord);
@@ -163,7 +160,6 @@ public class TelemedController {
 
     @GetMapping("/editRecord")
     String editRecord(int id, int sysPressure, int diasPressure, int heartRate, float bodyTemperature, String date, String time) throws ParseException {
-        date = reformatDate(date);
         Record record = recordRepository.findRecordById(id);
         record.setId(id);
         record.setSysPressure(sysPressure);
@@ -184,6 +180,7 @@ public class TelemedController {
         return "doctor_home.html";
     }
 
+    /*
     public String reformatDate(String dateToReformat) throws ParseException {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -192,6 +189,8 @@ public class TelemedController {
         return sdf.format(d);
 
     }
+
+     */
 
 
 }
