@@ -36,9 +36,12 @@
                     </a>
                 </div>
                 <div class="col-auto ms-auto">
-
+                    <button onclick="window.location.href='patientEnterTherapy'" class="btn btn-outline-primary" type="button">Dodaj/uredi kroničnu terapiju</button>
                     <button onclick="window.location.href='patientNewRecord'" class="btn btn-outline-primary" type="button">Dodaj novi zapis</button>
                     <button onclick="window.location.href='login'" class="btn btn-outline-danger" type="button">Odjava</button>
+                </div>
+                <div class="col-auto ms-auto">
+                    <button onclick="window.location.href='showEditPatientData'" class="btn btn-outline-primary" type="button">Uredi moje podatke</button>
                 </div>
             </div>
             <h3>Pregled povijesti zapisa pacijenta</h3>
@@ -84,7 +87,7 @@
                     <th>Tlak - sistolički (mmHg)</th>
                     <th>Tlak - dijastolički (mmHg)</th>
                     <th>Otkucaji srca (u min)</th>
-                    <th>Tjelesna temperatura (°C)</th>
+                    <th>Bilješka</th>
                     <th>Uredi</th>
                     <th>Obriši</th>
                 </tr>
@@ -96,7 +99,7 @@
                     <td th:text="${record.sysPressure}">Primjer</td>
                     <td th:text="${record.diasPressure}">Primjer</td>
                     <td th:text="${record.heartRate}">Primjer</td>
-                    <td th:text="${record.bodyTemperature}">Primjer</td>
+                    <td th:text="${record.note}">Primjer</td>
                     <td><a th:href="@{'/showEditRecord?id='+ ${record.id}}"><img src="images/edit.png" class="img-fluid" style="width: 20px;"></a></td>
                     <td><a th:href="@{'/deleteRecord?id='+ ${record.id}}"><img src="images/trash_can.png" class="img-fluid" style="width: 20px;"></a></td>
                 </tr>

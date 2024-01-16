@@ -63,10 +63,10 @@
                 </div>
                 <div class="row mt-4 mb-4">
                     <div class="col-3">
-                        <label for="bodyTemperature" class="col-form-label">Tjelesna temperatura:</label>
+                        <label for="note" class="col-form-label">Bilješka:</label>
                     </div>
                     <div class="col-9">
-                        <input th:value="${record.bodyTemperature}" type="number" step="any" class="form-control" id="bodyTemperature" name="bodyTemperature" placeholder="Unesite izmjerenu tjelesnu temperaturu (°C)" min="35" max="42" required>
+                        <input th:value="${record.note}" type="text" class="form-control" id="note" name="note" placeholder="Unesite bilješku" required>
                     </div>
                 </div>
                 <div class="row mt-4 mb-4">

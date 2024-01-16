@@ -56,6 +56,7 @@
                     <th>Prezime</th>
                     <th>Datum rođenja</th>
                     <th>MBO</th>
+                    <th>Broj mobitela</th>
                     <th>Email</th>
 
                     <th>Uredi</th>
@@ -69,6 +70,7 @@
                     <td th:text="${user.lname}">Primjer</td>
                     <td th:text="${user.birthday}">Primjer</td>
                     <td th:text="${user.mbo}">Primjer</td>
+                    <td th:text="${user.number}">Primjer</td>
                     <td th:text="${user.email}">Primjer</td>
 
                     <td><a th:href="@{'/showEditPatient?id='+ ${user.id}}"><img src="images/edit.png" class="img-fluid" style="width: 20px;"></a></td>

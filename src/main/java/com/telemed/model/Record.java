@@ -2,6 +2,8 @@ package com.telemed.model;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
+
 @Entity
 public class Record {
 
@@ -12,9 +14,10 @@ public class Record {
     private int sysPressure;
     private int diasPressure;
     private int heartRate;
-    private float bodyTemperature;
+    private String note;
     private String date;
     private String time;
+
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -24,11 +27,11 @@ public class Record {
 
     }
 
-    public Record(int sysPressure, int diasPressure, int heartRate, float bodyTemperature, String date, String time, User user) {
+    public Record(int sysPressure, int diasPressure, int heartRate, String note, String date, String time, User user) {
         this.sysPressure = sysPressure;
         this.diasPressure = diasPressure;
         this.heartRate = heartRate;
-        this.bodyTemperature = bodyTemperature;
+        this.note = note;
         this.date = date;
         this.time = time;
         this.user = user;
@@ -36,6 +39,13 @@ public class Record {
         id = idCounter++;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public int getSysPressure() {
         return sysPressure;
@@ -61,12 +71,12 @@ public class Record {
         this.heartRate = heartRate;
     }
 
-    public float getBodyTemperature() {
-        return bodyTemperature;
+    public String getNote() {
+        return note;
     }
 
-    public void setBodyTemperature(float bodyTemperature) {
-        this.bodyTemperature = bodyTemperature;
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public String getDate() {
@@ -83,14 +93,6 @@ public class Record {
 
     public void setTime(String time) {
         this.time = time;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public User getUser() {

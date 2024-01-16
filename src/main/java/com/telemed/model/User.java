@@ -15,17 +15,19 @@ public class User {
     private String lname;
     private String birthday;
     private int mbo;
+    private String number;
     private String email;
     private String password;
 
     public User() {
 
     }
-    public User(String fname, String lname, String birthday, int mbo, String email, String password) {
+    public User(String fname, String lname, String birthday, int mbo, String number, String email, String password) {
         this.fname = fname;
         this.lname = lname;
         this.birthday = birthday;
         this.mbo = mbo;
+        this.number = number;
         this.email = email;
         this.password = password;
 
@@ -90,6 +92,14 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public void setEmail(String email) {

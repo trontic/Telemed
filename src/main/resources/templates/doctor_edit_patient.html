@@ -71,6 +71,14 @@
                     </div>
                     <div class="row mt-4 mb-4">
                         <div class="col-3">
+                            <label for="number" class="col-form-label">Broj mobitela:</label>
+                        </div>
+                        <div class="col-9">
+                            <input th:value="${user.number}" class="form-control" id="number" name="number" placeholder="Unesite broj mobitela" pattern="^\+?([0-9]{1,3})?[-. ]?(\([0-9]{1,3}\)|[0-9]{1,3})[-. ]?([0-9]{1,4})[-. ]?([0-9]{1,4})[-. ]?([0-9]{1,4})$" required>
+                        </div>
+                    </div>
+                    <div class="row mt-4 mb-4">
+                        <div class="col-3">
                             <label for="email" class="col-form-label">Email:</label>
                         </div>
                         <div class="col-9">
@@ -79,7 +87,7 @@
                     </div>
                     <div class="row mt-4 mb-4">
                         <div class="col-3">
-                            <label for="password" class="col-form-label">Password:</label>
+                            <label for="password" class="col-form-label">Lozinka:</label>
                         </div>
                         <div class="col-9">
                             <input th:value="${user.password}" type="text" class="form-control" id="password" name="password" minlength="3" required>
