@@ -2,6 +2,8 @@ package com.telemed;
 
 import com.telemed.model.*;
 import com.telemed.model.Record;
+import com.telemed.tools.EmailSender;
+import io.micrometer.common.util.StringUtils;
 import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,9 +35,11 @@ public class TelemedController {
     @Autowired
     TherapyRepositoryDB therapyRepository;
 
+    private EmailSender emailSender;
+
 
     public TelemedController() {
-
+        this.emailSender = new EmailSender();
     }
 
 
@@ -50,8 +54,48 @@ public class TelemedController {
     String addNewUser(@RequestParam("fname") String fname, @RequestParam("lname") String lname,
                       @RequestParam("birthday") String birthday, @RequestParam("mbo") int mbo, @RequestParam("number") String number,
                       @RequestParam("email") String email, @RequestParam("password") String password, Model model) {
-        userRepository.save(new User(fname, lname, birthday, mbo, number, email, password));
+        userRepository.save(new User(fname, lname, birthday, mbo, number, email, password, false));
+        emailSender.sendEmail(email, "Telemed racun", "Vas doktor je napravio racun za vas s lozinkom " + password + ". Prvi puta kada se ulogirate u sustav trebat cete kreirati novu lozinku.");
         return "redirect:/patients";
+    }
+
+    @GetMapping("/changePassword")
+    String showChangePassword(Model model) {
+        return "patient_password_change.html";
+    }
+
+    @GetMapping("/changePasswordAction")
+    String changePasswordAction(@RequestParam("password") String newPassword,
+                                @RequestParam("confirmPassword") String confirmPassword,
+                                @RequestParam(value = "allowAccess", required = false) Boolean allowAccess,
+                                Model model) {
+        if (StringUtils.isBlank(newPassword) || newPassword.length() < 5) {
+            model.addAttribute("passwordLengthError", true);
+            return "patient_password_change.html";
+        }
+
+        if (!newPassword.equals(confirmPassword)) {
+            model.addAttribute("passwordMismatch", true);
+            return "/patient_password_change.html";
+        } else {
+            if (newPassword.equals(currentUser.getPassword())) {
+                model.addAttribute("samePasswordError", true);
+                return "patient_password_change.html";
+            } else {
+                if (allowAccess == null || !allowAccess) {
+                    model.addAttribute("accessError", true);
+                    model.addAttribute("newPassword", newPassword);
+                    model.addAttribute("confirmPassword", confirmPassword);
+                    return "patient_password_change.html";
+                }
+
+                currentUser.setPassword(newPassword);
+                currentUser.setPasswordChanged();
+                userRepository.save(currentUser);
+
+                return "redirect:/records";
+            }
+        }
     }
 
     @GetMapping("/showEditPatient")
@@ -102,16 +146,22 @@ public class TelemedController {
     public String loginProcess(@RequestParam("email") String email,
                                @RequestParam("password") String password, Model model){
 
-        User u = userRepository.findByEmailAndPassword(email, password);
+        User user = userRepository.findByEmailAndPassword(email, password);
 
-        if (u == null) {
+        if (user == null) {
             model.addAttribute("userMessage", "Korisnik nije pronađen!");
+            model.addAttribute("email", email);
+            model.addAttribute("password", password);
             return "login.html";
         } else {
-            currentUser = u;
+            currentUser = user;
 
-            if (u.getType() == 0) {
-                return "redirect:/records";
+            if (user.getType() == 0) {
+                if (!user.hasUpdatedPassword()) {
+                    return "redirect:/changePassword";
+                } else {
+                    return "redirect:/records";
+                }
             } else {
                 return "redirect:/patients";
             }
