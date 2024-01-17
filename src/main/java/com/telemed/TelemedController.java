@@ -148,10 +148,13 @@ public class TelemedController {
         newRecord.setUser(currentUser);
         recordRepository.save(newRecord);
 
-        /*
-        List<TherapyPlan> therapyPlanList = therapyPlanRepository.findByUserAndDayPart(currentUser, dayPart);
-        Therapy newTherapy = new Therapy(nameMedicine, dosage, quantity, dayPart, iregular, user, record);
+
+        List<TherapyPlan> therapyPlanList = (List<TherapyPlan>)
+         therapyPlanRepository.findByUserAndDayPart(currentUser, calculateDayPart());
+
         for(TherapyPlan therapyPlan1 : therapyPlanList) {
+            Therapy newTherapy = new Therapy();
+
             newTherapy.setNameMedicine(therapyPlan1.getNameMedicine());
             newTherapy.setDosage(therapyPlan1.getDosage());
             newTherapy.setQuantity(therapyPlan1.getQuantity());
@@ -160,10 +163,8 @@ public class TelemedController {
             newTherapy.setUser(currentUser);
             newTherapy.setRecord(newRecord);
 
+            therapyRepository.save(newTherapy);
         }
-        therapyRepository.save(newTherapy);
-         */
-
         return "redirect:/records";
     }
 
@@ -179,28 +180,8 @@ public class TelemedController {
         DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("HH:mm");
         model.addAttribute("currentTime", currentTime.format(formatter2));
 
-        DateTimeFormatter formatter3 = DateTimeFormatter.ofPattern("HH:mm");
-        String dayPart = null;
 
-        String four = "04:00";
-        String ten = "10:00";
-        String sixteen = "16:00";
-        String midnight = "23:59";
-
-        LocalTime morning_low = LocalTime.parse(four, formatter3);
-        LocalTime morning_high = LocalTime.parse(ten, formatter3);
-        LocalTime noon_high = LocalTime.parse(sixteen, formatter3);
-        LocalTime evening_high = LocalTime.parse(midnight, formatter3);
-
-        if (currentTime.isAfter(morning_low) && currentTime.isBefore(morning_high)) {
-            dayPart = "jutro";
-        } else if (currentTime.isAfter(morning_high) && currentTime.isBefore(noon_high)) {
-            dayPart = "podne";
-        } else if (currentTime.isAfter(noon_high) && currentTime.isBefore(evening_high)) {
-            dayPart = "večer";
-        }
-
-        List<TherapyPlan> therapyPlanList = therapyPlanRepository.findByUserAndDayPart(currentUser, dayPart);
+        List<TherapyPlan> therapyPlanList = therapyPlanRepository.findByUserAndDayPart(currentUser, calculateDayPart());
         model.addAttribute(therapyPlanList);
 
         return "patient_new_record.html";
@@ -287,4 +268,37 @@ public class TelemedController {
         System.out.println("Korisnik " + fname + " " + lname + " je ažuriran.");
         return "redirect:/records";
     }
+
+    public String calculateDayPart(){
+
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        //model.addAttribute("currentDate", currentDate.format(formatter));
+        LocalTime currentTime = LocalTime.now();
+        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("HH:mm");
+        //model.addAttribute("currentTime", currentTime.format(formatter2));
+
+        DateTimeFormatter formatter3 = DateTimeFormatter.ofPattern("HH:mm");
+        String dayPart = null;
+
+        String four = "04:00";
+        String ten = "10:00";
+        String sixteen = "16:00";
+        String midnight = "23:59";
+
+        LocalTime morning_low = LocalTime.parse(four, formatter3);
+        LocalTime morning_high = LocalTime.parse(ten, formatter3);
+        LocalTime noon_high = LocalTime.parse(sixteen, formatter3);
+        LocalTime evening_high = LocalTime.parse(midnight, formatter3);
+
+        if (currentTime.isAfter(morning_low) && currentTime.isBefore(morning_high)) {
+            dayPart = "jutro";
+        } else if (currentTime.isAfter(morning_high) && currentTime.isBefore(noon_high)) {
+            dayPart = "podne";
+        } else if (currentTime.isAfter(noon_high) && currentTime.isBefore(evening_high)) {
+            dayPart = "večer";
+        }
+        return dayPart;
+    }
+
 }
