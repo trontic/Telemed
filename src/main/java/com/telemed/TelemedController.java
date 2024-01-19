@@ -351,4 +351,8 @@ public class TelemedController {
         return dayPart;
     }
 
+    @GetMapping("/proba")
+    public String proba() {
+        return "proba.html";
+    }
 }

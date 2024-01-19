@@ -84,6 +84,7 @@
                     <th>Tlak - dijastolički (mmHg)</th>
                     <th>Otkucaji srca (u min)</th>
                     <th>Bilješka</th>
+                    <th>Terapija</th>
                 </tr>
                 </thead>
                 <tbody class="table-group-divider text-nowrap">
@@ -94,9 +95,11 @@
                     <td th:text="${record.diasPressure}">Primjer</td>
                     <td th:text="${record.heartRate}">Primjer</td>
                     <td th:text="${record.note}">Primjer</td>
+                    <td><img src="images/pill.png" class="img-fluid" style="width: 20px;"></td>
                 </tr>
                 </tbody>
             </table>
+
         </div>
     </div>
 </div>
