@@ -5,6 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var thymeleafValue = document.getElementById('myElement').getAttribute('data-myvalue');
+
+            // Now send this value using AJAX
+            fetch('/your-endpoint', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ value: thymeleafValue })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                // Handle any response here
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
     <script src="script.js"></script>
     <title>Telemed - Pregled pacijenta</title>
 </head>
@@ -95,13 +119,47 @@
                     <td th:text="${record.diasPressure}">Primjer</td>
                     <td th:text="${record.heartRate}">Primjer</td>
                     <td th:text="${record.note}">Primjer</td>
-                    <td><img src="images/pill.png" class="img-fluid" style="width: 20px;"></td>
+                    <input type="number" id="myElement" th:data-myvalue="${record.id}" hidden>
+                    <!--<td><a><img src="images/pill.png" class="img-fluid" data-toggle="modal" data-target="#myModal" style="width: 20px;"></a></td> -->
+                    <td><button type="button" onclick="function()" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Prikaži</button></td>
                 </tr>
                 </tbody>
             </table>
 
+            <div class="modal" id="myModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <table class="table table-striped align-middle">
+                                <thead>
+                                <tr>
+                                    <th>Naziv lijeka</th>
+                                    <th>Doza (mg)</th>
+                                    <th>Količina</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="therapy : ${therapyList}">
+                                    <td th:text="${therapy.nameMedicine}">Primjer</td>
+                                    <td th:text="${therapy.dosage}">Primjer</td>
+                                    <td th:text="${therapy.quantity}">Primjer</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+
         </div>
     </div>
 </div>
+
+
 </body>
 </html>

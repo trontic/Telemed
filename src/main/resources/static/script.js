@@ -10,3 +10,4 @@ document.addEventListener('DOMContentLoaded', function () {
         adviceText.style.display = this.checked ? 'block' : 'none';
     });
 });
+

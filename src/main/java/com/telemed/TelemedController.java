@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.chrono.ChronoLocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 
 
@@ -99,7 +97,7 @@ public class TelemedController {
     }
 
     @GetMapping("/showEditPatient")
-    String showEditUser(int id, Model model) {
+    String showEditUser(@RequestParam("id") int id, Model model) {
         User user = userRepository.findUserById(id);
         model.addAttribute("user", user);
         model.addAttribute("currentUser", currentUser);
@@ -107,7 +105,9 @@ public class TelemedController {
     }
 
     @GetMapping("/editPatient")
-    String editUser(int id, String fname, String lname, String birthday, int mbo, String number, String email, String password, Model model) {
+    String editUser(@RequestParam("id") int id,@RequestParam("fname")  String fname,@RequestParam("lname")  String lname,
+                    @RequestParam("birthday")  String birthday,@RequestParam("mbo")  int mbo,@RequestParam("number")  String number,
+                    @RequestParam("email") String email,@RequestParam("password")  String password, Model model) {
         User user = userRepository.findUserById(id);
         user.setFname(fname);
         user.setLname(lname);
@@ -122,14 +122,14 @@ public class TelemedController {
     }
 
     @GetMapping("/showPatientOverview")
-    String showPatientOverview(int id, Model model) {
+    String showPatientOverview(@RequestParam("id") int id, Model model) {
         User user = userRepository.findUserById(id);
         model.addAttribute(recordRepository.findAllByUser(user));
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("user", user);
+
         return "doctor_patient_overview.html";
     }
-
 
 
     @GetMapping("/login")
@@ -192,8 +192,9 @@ public class TelemedController {
     }
 
     @GetMapping("/addNewRecord")
-    String addNewRecord( int sysPressure, int diasPressure, int heartRate, String note,
-                         String date, String time, User user) {
+    String addNewRecord(@RequestParam("sysPressure")  int sysPressure,@RequestParam("diasPressure")  int diasPressure,
+                        @RequestParam("heartRate")  int heartRate,@RequestParam("note")  String note,
+                        @RequestParam("date") String date,@RequestParam("time")  String time,User user) {
         Record newRecord = new Record(sysPressure, diasPressure, heartRate, note, date, time, user);
         newRecord.setUser(currentUser);
         recordRepository.save(newRecord);
@@ -244,7 +245,7 @@ public class TelemedController {
     }
 
     @GetMapping("/showEditRecord")
-    String showEditRecord(int id, Model model) {
+    String showEditRecord(@RequestParam("id") int id, Model model) {
         Record record = recordRepository.findRecordById(id);
         model.addAttribute("record", record);
         model.addAttribute("currentUser", currentUser);
@@ -252,7 +253,9 @@ public class TelemedController {
     }
 
     @GetMapping("/editRecord")
-    String editRecord(int id, int sysPressure, int diasPressure, int heartRate, String note, String date, String time) {
+    String editRecord(@RequestParam("id") int id,@RequestParam("sysPressure")  int sysPressure,
+                      @RequestParam("diasPressure")  int diasPressure,@RequestParam("heartRate")  int heartRate,
+                      @RequestParam("note") String note,@RequestParam("date")  String date,@RequestParam("time")  String time) {
         Record record = recordRepository.findRecordById(id);
         record.setId(id);
         record.setSysPressure(sysPressure);
@@ -282,7 +285,8 @@ public class TelemedController {
     }
 
     @GetMapping("/addNewTherapy")
-    String addNewTherapy(String name, float dosage, float quantity, String dayPart, boolean iregular, User user) {
+    String addNewTherapy(@RequestParam("name") String name,@RequestParam("dosage") float dosage,@RequestParam("quantity") float quantity,
+                         @RequestParam("dayPart") String dayPart, boolean iregular, User user) {
         TherapyPlan newTherapyPlan = new TherapyPlan(name, dosage, quantity, dayPart, iregular, user);
         newTherapyPlan.setUser(currentUser);
         therapyPlanRepository.save(newTherapyPlan);
@@ -304,8 +308,10 @@ public class TelemedController {
     }
 
     @GetMapping("/editPatientData")
-    String editUserData(String fname, String lname, String birthday, int mbo, String number, String email,
-                        String password, Model model) {
+    String editUserData(@RequestParam("fname") String fname,@RequestParam("lname")  String lname,
+                        @RequestParam("birthday") String birthday,@RequestParam("mbo")  int mbo,
+                        @RequestParam("number") String number,@RequestParam("email")  String email,
+                        @RequestParam("password") String password, Model model) {
         User user = currentUser;
         user.setFname(fname);
         user.setLname(lname);
@@ -349,10 +355,5 @@ public class TelemedController {
             dayPart = "večer";
         }
         return dayPart;
-    }
-
-    @GetMapping("/proba")
-    public String proba() {
-        return "proba.html";
     }
 }

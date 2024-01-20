@@ -42,7 +42,7 @@
                             <label for="fname" class="col-form-label">Ime:</label>
                         </div>
                         <div class="col-9">
-                            <input th:value="${user.fname}" type="text" class="form-control" id="fname" name="fname" pattern="[a-zA-ZčćžšđČĆŽŠĐ-]+" required>
+                            <input th:value="${user.fname}" type="text" class="form-control" id="fname" name="fname" pattern="[A-Za-zčćžšđČĆŽŠĐ\- ]+" required>
                         </div>
                     </div>
                     <div class="row mt-4 mb-4">
@@ -50,7 +50,7 @@
                             <label for="lname" class="col-form-label">Prezime:</label>
                         </div>
                         <div class="col-9">
-                            <input th:value="${user.lname}" type="text" class="form-control" id="lname" name="lname" pattern="[a-zA-ZčćžšđČĆŽŠĐ-]+" required>
+                            <input th:value="${user.lname}" type="text" class="form-control" id="lname" name="lname" pattern="[A-Za-zčćžšđČĆŽŠĐ\- ]+" required>
                         </div>
                     </div>
                     <div class="row mt-4 mb-4">
@@ -58,7 +58,7 @@
                             <label for="birthday" class="col-form-label">Datum rođenja:</label>
                         </div>
                         <div class="col-9">
-                            <input th:value="${user.birthday}" type="date" class="form-control" id="birthday" name="birthday" min="1900-01-01" max="2023-01-01" required>
+                            <input th:value="${user.birthday}" type="date" class="form-control" id="birthday" name="birthday" min="1900-01-01" max="2024-01-01" required>
                         </div>
                     </div>
                     <div class="row mt-4 mb-4">
@@ -74,7 +74,7 @@
                             <label for="number" class="col-form-label">Broj mobitela:</label>
                         </div>
                         <div class="col-9">
-                            <input th:value="${user.number}" class="form-control" id="number" name="number" placeholder="Unesite broj mobitela" pattern="^\+?([0-9]{1,3})?[-. ]?(\([0-9]{1,3}\)|[0-9]{1,3})[-. ]?([0-9]{1,4})[-. ]?([0-9]{1,4})[-. ]?([0-9]{1,4})$" required>
+                            <input th:value="${user.number}" class="form-control" id="number" name="number" placeholder="Unesite broj mobitela" pattern="(\+385|00385)?\d{8,10}" required>
                         </div>
                     </div>
                     <div class="row mt-4 mb-4">
