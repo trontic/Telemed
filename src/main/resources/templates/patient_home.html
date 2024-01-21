@@ -5,37 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var thymeleafValue = document.getElementById('myElement').getAttribute('data-myvalue');
-
-            // Now send this value using AJAX
-            fetch('/your-endpoint', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({ value: thymeleafValue })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-                // Handle any response here
-            })
-            .catch(error => console.error('Error:', error));
-        });
-    </script>
     <script src="script.js"></script>
     <title>eDnevnik tlaka - Početna stranica</title>
 </head>
 <body>
 
 <div class="container">
-    <div class="row">
-        <div class="col-12">
+    <div class="row justify-content-center">
+        <div class="col-sm-12 col-md-8 col-lg-6">
             <div class="pt-2">
                 <h1 class="centered-text custom-color">eDnevnik tlaka</h1>
+                <div class="centered-text row mb-2 custom-color fs-4">
+                    <span>Pregled mjerenja tlaka</span>
+                </div>
                 <div class="centered-text custom-color fs-1">
                     <span th:text="${currentUser.getFname()}"></span>
                     <span th:text="${currentUser.getLname()}"></span>
@@ -44,7 +26,7 @@
             <div class="row mb-2">
                 <div class="d-grid gap-2">
                     <button onclick="window.location.href='patientEnterTherapy'" class="btn btn-outline-primary" type="button">Dodaj/uredi kroničnu terapiju</button>
-                    <button onclick="window.location.href='patientNewRecord'" class="btn btn-outline-primary" type="button">Dodaj novi zapis</button>
+                    <button onclick="window.location.href='patientNewRecord'" class="btn btn-outline-primary" type="button">Unesi novo mjerenje</button>
                     <button onclick="window.location.href='showEditPatientData'" class="btn btn-outline-primary" type="button">Uredi moje podatke</button>
                     <button onclick="window.location.href='login'" class="btn btn-outline-danger" type="button">Odjava</button>
                 </div>

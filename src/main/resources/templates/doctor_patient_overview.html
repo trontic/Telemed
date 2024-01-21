@@ -30,7 +30,7 @@
         });
     </script>
     <script src="script.js"></script>
-    <title>Telemed - Pregled pacijenta</title>
+    <title>eDnevnik tlaka - Pacijentovi zapisi</title>
 </head>
 <body>
 
@@ -39,13 +39,13 @@
         <div class="col-md-12">
             <div class="row p-3 mb-2 bg-success text-white">
                 <div class="col-auto me-auto">
-                    <h4>Telemed</h4>
-                    <span>Administrativno sučelje</span>
+                    <h4>eDnevnik tlaka</h4>
+                    <span>Sučelje za liječnike</span>
                 </div>
                 <div class="col-auto ms-auto">
-                    <span>Administrator: dr.</span>
                     <span th:text="${currentUser.getFname()}"></span>
                     <span th:text="${currentUser.getLname()}"></span>
+                    <span>, dr.med.</span>
                 </div>
             </div>
             <div class="row mb-2">
@@ -63,7 +63,7 @@
                     <button onclick="window.location.href='login'" class="btn btn-outline-danger" type="button">Odjava</button>
                 </div>
             </div>
-            <h3>Pregled povijesti zapisa pacijenta</h3>
+            <h3>Pregled pacijentovog dnevnika tlaka</h3>
             <form class="row mb-2">
                 <div class="row">
                     <div class="col-2 mb-2">
