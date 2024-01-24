@@ -35,7 +35,7 @@ public class User {
         this.password = password;
         this.passwordUpdated = passwordUpdated;
 
-        id = idCounter++;
+
     }
 
     public int getId() {

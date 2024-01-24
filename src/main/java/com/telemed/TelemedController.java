@@ -54,7 +54,8 @@ public class TelemedController {
     String addNewUser(@RequestParam("fname") String fname, @RequestParam("lname") String lname,
                       @RequestParam("birthday") String birthday, @RequestParam("mbo") int mbo, @RequestParam("number") String number,
                       @RequestParam("email") String email, @RequestParam("password") String password, Model model) {
-        userRepository.save(new User(fname, lname, birthday, mbo, number, email, password, false));
+        User newUser = new User(fname, lname, birthday, mbo, number, email, password, false);
+        userRepository.save(newUser);
         emailSender.sendEmail(email, "Telemed racun", "Vas doktor je napravio racun za vas s lozinkom " + password + ". Prvi puta kada se ulogirate u sustav trebat cete kreirati novu lozinku.");
         return "redirect:/patients";
     }
@@ -183,6 +184,8 @@ public class TelemedController {
         userRepository.delete(user);
         return "redirect:/patients";
     }
+
+
 
     @GetMapping("/records")
     public String records(Model model) {

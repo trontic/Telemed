@@ -8,7 +8,6 @@ public class Therapy {
     @Id
     @GeneratedValue
     private int id;
-    static int idCounter = 0;
     private String nameMedicine;
     private float dosage;
     private float quantity;
@@ -35,7 +34,6 @@ public class Therapy {
         this.user = user;
         this.record = record;
 
-        id=idCounter++;
     }
 
     public int getId() {

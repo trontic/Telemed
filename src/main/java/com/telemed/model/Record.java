@@ -10,7 +10,6 @@ public class Record {
     @Id
     @GeneratedValue
     private int id;
-    static int idCounter = 0;
     private int sysPressure;
     private int diasPressure;
     private int heartRate;
@@ -36,7 +35,6 @@ public class Record {
         this.time = time;
         this.user = user;
 
-        id = idCounter++;
     }
 
     public int getId() {

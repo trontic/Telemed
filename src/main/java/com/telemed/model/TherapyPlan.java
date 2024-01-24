@@ -8,7 +8,6 @@ public class TherapyPlan {
     @Id
     @GeneratedValue
     private int id;
-    static int idCounter = 0;
     private String nameMedicine;
     private float dosage;
     private float quantity;
@@ -30,7 +29,6 @@ public class TherapyPlan {
         this.user = user;
         this.iregular = iregular;
 
-        id=idCounter++;
     }
 
     public int getId() {
