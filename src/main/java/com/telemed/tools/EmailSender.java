@@ -35,14 +35,14 @@ public class EmailSender {
 
     private void setup() {
         String username = "registracija@ednevnik-tlaka.net";
-        String password = "C7X52T2;2#tSjtf.";
+        String password = "C7X52T2;2*tSjtf.";
         this.fromEmailAddress = username;
 
         // Set the properties for the email server
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.host", "smtppro.zoho.eu");
+        properties.put("mail.smtp.host", "smtp.zoho.eu");
         properties.put("mail.smtp.port", "587");
         Session session = Session.getInstance(properties, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {

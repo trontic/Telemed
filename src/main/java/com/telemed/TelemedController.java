@@ -16,8 +16,12 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.chrono.ChronoLocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import org.springframework.data.domain.Sort;
+
 
 
 @Controller
@@ -56,7 +60,9 @@ public class TelemedController {
                       @RequestParam("email") String email, @RequestParam("password") String password, Model model) {
         User newUser = new User(fname, lname, birthday, mbo, number, email, password, false);
         userRepository.save(newUser);
-        emailSender.sendEmail(email, "Telemed racun", "Vas doktor je napravio racun za vas s lozinkom " + password + ". Prvi puta kada se ulogirate u sustav trebat cete kreirati novu lozinku.");
+        emailSender.sendEmail(email, "Registracija na eDnevnik tlaka", "Vaš liječnik kreirao je za Vas račun na eDnevnik-tlaka.net.\n" +
+                "Za prvu prijavu koristite Vašu email adresu i privremenu lozinku " + password + ". Kod prve prijave bit će potrebno promijeniti lozinku.\n" +
+                "Molimo Vas da novu lozinku zapišete kako je ne biste zaboravili. Hvala ");
         return "redirect:/patients";
     }
 
@@ -125,7 +131,8 @@ public class TelemedController {
     @GetMapping("/showPatientOverview")
     String showPatientOverview(int id, Model model) {
         User user = userRepository.findUserById(id);
-        model.addAttribute(recordRepository.findAllByUser(user));
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        model.addAttribute("recordList", recordRepository.findAllByUser(user, sort));
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("user", user);
         return "doctor_patient_overview.html";
@@ -190,18 +197,41 @@ public class TelemedController {
     @GetMapping("/records")
     public String records(Model model) {
         model.addAttribute("currentUser", currentUser);
-        model.addAttribute(recordRepository.findAllByUser(currentUser));
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        model.addAttribute("recordList", recordRepository.findAllByUser(currentUser, sort));
         return "patient_home.html";
     }
 
     @GetMapping("/addNewRecord")
-    String addNewRecord( int sysPressure, int diasPressure, int heartRate, String note,
-                         String date, String time, User user) {
+    String addNewRecord(@RequestParam("sysPressure") int sysPressure, @RequestParam("diasPressure") int diasPressure,
+                        @RequestParam("heartRate") int heartRate,@RequestParam("note") String note,
+                        @RequestParam("date") String date,@RequestParam("time") String time, User user,
+                        @RequestParam(value = "selectedTherapyPlanIds", required = false) List<Integer> selectedIds,
+                        Model model) {
         Record newRecord = new Record(sysPressure, diasPressure, heartRate, note, date, time, user);
         newRecord.setUser(currentUser);
         recordRepository.save(newRecord);
 
+        if (selectedIds != null && !selectedIds.isEmpty()) {
+            List<TherapyPlan> selectedTherapyPlans = (List<TherapyPlan>) therapyPlanRepository.findAllById(selectedIds);
 
+            for(TherapyPlan therapyPlan : selectedTherapyPlans) {
+                Therapy newTherapy = createTherapyFromPlan(therapyPlan, currentUser, newRecord);
+                therapyRepository.save(newTherapy);
+            }
+        } else {
+            return "redirect:/records";
+        }
+
+
+
+
+
+
+
+
+
+        /*
         List<TherapyPlan> therapyPlanList = (List<TherapyPlan>)
          therapyPlanRepository.findByUserAndDayPart(currentUser, calculateDayPart());
 
@@ -218,6 +248,8 @@ public class TelemedController {
 
             therapyRepository.save(newTherapy);
         }
+         */
+
         return "redirect:/records";
     }
 
@@ -354,8 +386,15 @@ public class TelemedController {
         return dayPart;
     }
 
-    @GetMapping("/proba")
-    public String proba() {
-        return "proba.html";
+    private Therapy createTherapyFromPlan(TherapyPlan plan, User user, Record record) {
+        Therapy therapy = new Therapy();
+        therapy.setNameMedicine(plan.getNameMedicine());
+        therapy.setDosage(plan.getDosage());
+        therapy.setQuantity(plan.getQuantity());
+        therapy.setDayPart(plan.getDayPart());
+        therapy.setIregular(plan.isIregular());
+        therapy.setUser(user);
+        therapy.setRecord(record);
+        return therapy;
     }
 }

@@ -11,4 +11,6 @@ public interface TherapyPlanRepositoryDB extends CrudRepository<TherapyPlan, Int
     Iterable<TherapyPlan> findAllByUser(User user);
 
     List<TherapyPlan> findByUserAndDayPart(User user, String dayPart);
+
+
 }

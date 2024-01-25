@@ -50,31 +50,9 @@
                     <li>Ako želite ponoviti mjerenje, pričekajte 2-3 minute prije ponovnog napuhavanja manšete.</li>
                 </ul>
             </div>
-            <div class="d-flex justify-content-left align-items-center form-check form-switch">
-                <label class="form-check-label m-2" for="consumedTherapy">Popijena sva kronična terapija</label>
-                <input class="form-check-input m-2 me-auto" type="checkbox" id="consumedTherapy">
-            </div>
-            <table id="patients" class="table table-md table-borderless table-hover align-middle">
-                <thead>
-                <tr>
-                    <th>Naziv lijeka</th>
-                    <th>Doza (u mg)</th>
-                    <th>Količina</th>
-                    <th>Vrijeme primjene</th>
-                    <th>Popijeno</th>
-                </tr>
-                </thead>
-                <tbody class="table-group-divider text-nowrap">
-                <tr th:each="therapy : ${therapyPlanList}">
-                    <td th:text="${therapy.nameMedicine}">Primjer</td>
-                    <td th:text="${therapy.dosage}">Primjer</td>
-                    <td th:text="${therapy.quantity}">Primjer</td>
-                    <td th:text="${therapy.dayPart}">Primjer</td>
-                    <td><input type="checkbox" id="" name="" checked></td>
-                </tr>
-                </tbody>
-            </table>
             <form action="/addNewRecord">
+
+
                 <div class="form-group row">
                     <div class="col-12">
                         <label for="sysPressure" class="col-form-label">Sistolički(gornji) tlak:</label>
@@ -100,6 +78,30 @@
                         <label for="time" class="col-form-label">Vrijeme:</label>
                         <input type="time" th:value="${currentTime}" class="form-control" id="time" name="time">
                     </div>
+                    <div class="d-flex justify-content-left align-items-center form-check form-switch form-group">
+                        <label class="form-check-label m-2" for="toggleCheckbox">Popijena sva kronična terapija</label>
+                        <input class="form-check-input m-2 me-auto" type="checkbox" id="toggleCheckbox" checked onchange="toggleTargetCheckboxes()">
+                    </div>
+                    <table id="patients" class="table table-md table-borderless table-hover align-middle">
+                        <thead>
+                        <tr>
+                            <th>Naziv lijeka</th>
+                            <th>Doza (u mg)</th>
+                            <th>Količina</th>
+                            <th>Vrijeme primjene</th>
+                            <th>Popijeno</th>
+                        </tr>
+                        </thead>
+                        <tbody class="table-group-divider text-nowrap form-group">
+                        <tr th:each="therapy : ${therapyPlanList}">
+                            <td th:text="${therapy.nameMedicine}">Primjer</td>
+                            <td th:text="${therapy.dosage}">Primjer</td>
+                            <td th:text="${therapy.quantity}">Primjer</td>
+                            <td th:text="${therapy.dayPart}">Primjer</td>
+                            <td><input type="checkbox" name="selectedTherapyPlanIds" th:value="${therapy.id}" class="targetCheckbox" checked/></td>
+                        </tr>
+                        </tbody>
+                    </table>
                     <div class="input-group mt-3">
                         <button class="btn btn-og btn-primary col-12 mb-2" type="submit">Spremi</button>
                     </div>

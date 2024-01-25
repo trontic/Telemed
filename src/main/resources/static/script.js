@@ -11,3 +11,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+function toggleTargetCheckboxes() {
+    var toggle = document.getElementById("toggleCheckbox");
+    var targetCheckboxes = document.getElementsByClassName("targetCheckbox");
+
+    for (var i = 0; i < targetCheckboxes.length; i++) {
+      targetCheckboxes[i].checked = toggle.checked
+    }
+  }
