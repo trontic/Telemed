@@ -75,13 +75,12 @@
                 </tbody>
             </table>
             <form action="/addNewRecord">
+                <div class="form-check mt-4 mb-4">
+                    <input class="form-check-input" type="checkbox" id="emergencyCheck" name="emergency">
+                    <label class="form-check-label" for="emergencyCheck">Izvanredno mjerenje tlaka</label>
+                </div>
+                <input type="hidden" name="emergency" th:value="${emergencyCheck != null && emergencyCheck}" />
                 <div class="row mt-5 mb-4">
-                    <div class="form-check mt-4">
-                        <input class="form-check-input" type="checkbox" id="emergencyCheck" name="emergency">
-                        <label class="form-check-label" for="emergencyCheck">Izvanredno mjerenje tlaka</label>
-                    </div>
-                    <input type="hidden" name="emergency" th:value="${emergencyCheck != null && emergencyCheck}" />
-
                     <div class="col-3">
                         <label for="sysPressure" class="col-form-label">Tlak (sistolički):</label>
                     </div>
