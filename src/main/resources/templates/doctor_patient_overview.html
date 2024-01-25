@@ -112,7 +112,7 @@
                 </tr>
                 </thead>
                 <tbody class="table-group-divider text-nowrap">
-                <tr th:each="record : ${recordList}">
+                <tr th:each="record : ${recordList}" th:class="${record.emergency} ? 'table-danger' : ''">
                     <td th:text="${record.date}">Primjer</td>
                     <td th:text="${record.time}">Primjer</td>
                     <td th:text="${record.sysPressure}">Primjer</td>

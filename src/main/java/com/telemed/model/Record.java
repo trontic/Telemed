@@ -17,6 +17,8 @@ public class Record {
     private String note;
     private String date;
     private String time;
+    @Column(columnDefinition = "BOOLEAN DEFAULT false")
+    private boolean emergency;
 
 
     @ManyToOne
@@ -27,7 +29,7 @@ public class Record {
 
     }
 
-    public Record(int sysPressure, int diasPressure, int heartRate, String note, String date, String time, User user) {
+    public Record(int sysPressure, int diasPressure, int heartRate, String note, String date, String time, User user, boolean emergency) {
         this.sysPressure = sysPressure;
         this.diasPressure = diasPressure;
         this.heartRate = heartRate;
@@ -35,6 +37,7 @@ public class Record {
         this.date = date;
         this.time = time;
         this.user = user;
+        this.emergency = emergency;
 
         id = idCounter++;
     }
@@ -102,4 +105,8 @@ public class Record {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public boolean getEmergency() {return emergency;}
+
+    public void setEmergency(boolean emergency) { this.emergency = emergency;}
 }

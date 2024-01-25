@@ -194,8 +194,12 @@ public class TelemedController {
     @GetMapping("/addNewRecord")
     String addNewRecord(@RequestParam("sysPressure")  int sysPressure,@RequestParam("diasPressure")  int diasPressure,
                         @RequestParam("heartRate")  int heartRate,@RequestParam("note")  String note,
-                        @RequestParam("date") String date,@RequestParam("time")  String time,User user) {
-        Record newRecord = new Record(sysPressure, diasPressure, heartRate, note, date, time, user);
+                        @RequestParam("date") String date,@RequestParam("time")  String time,
+                        @RequestParam(value = "emergency", defaultValue = "false") boolean emergency,
+                        User user) {
+
+
+        Record newRecord = new Record(sysPressure, diasPressure, heartRate, note, date, time, user, emergency);
         newRecord.setUser(currentUser);
         recordRepository.save(newRecord);
 
