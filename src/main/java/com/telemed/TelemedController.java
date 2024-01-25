@@ -207,8 +207,9 @@ public class TelemedController {
                         @RequestParam("heartRate") int heartRate,@RequestParam("note") String note,
                         @RequestParam("date") String date,@RequestParam("time") String time, User user,
                         @RequestParam(value = "selectedTherapyPlanIds", required = false) List<Integer> selectedIds,
+                        @RequestParam(value = "emergency", defaultValue = "false") boolean emergency,
                         Model model) {
-        Record newRecord = new Record(sysPressure, diasPressure, heartRate, note, date, time, user);
+        Record newRecord = new Record(sysPressure, diasPressure, heartRate, note, date, time, user, emergency);
         newRecord.setUser(currentUser);
         recordRepository.save(newRecord);
 
