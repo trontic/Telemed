@@ -34,8 +34,8 @@ public class EmailSender {
     }
 
     private void setup() {
-        String username = "registracija@ednevnik-tlaka.net";
-        String password = "C7X52T2;2*tSjtf.";
+        String username = System.getenv("EMAIL_USERNAME");
+        String password = System.getenv("EMAIL_PASSWORD");
         this.fromEmailAddress = username;
 
         // Set the properties for the email server
