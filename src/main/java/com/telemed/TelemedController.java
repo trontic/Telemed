@@ -208,6 +208,7 @@ public class TelemedController {
                         @RequestParam("date") String date,@RequestParam("time") String time, User user,
                         @RequestParam(value = "selectedTherapyPlanIds", required = false) List<Integer> selectedIds,
                         @RequestParam(value = "emergency", defaultValue = "false") boolean emergency,
+                        @RequestParam(value = "iregular", defaultValue = "false") boolean iregular,
                         Model model) {
         Record newRecord = new Record(sysPressure, diasPressure, heartRate, note, date, time, user, emergency);
         newRecord.setUser(currentUser);
@@ -218,6 +219,7 @@ public class TelemedController {
 
             for(TherapyPlan therapyPlan : selectedTherapyPlans) {
                 Therapy newTherapy = createTherapyFromPlan(therapyPlan, currentUser, newRecord);
+                newTherapy.setIregular(iregular);
                 therapyRepository.save(newTherapy);
             }
         } else {
