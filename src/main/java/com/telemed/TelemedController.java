@@ -229,13 +229,30 @@ public class TelemedController {
             newRecord.setEmergency(false);
             newRecord.setUser(currentUser);
             recordRepository.save(newRecord);
-            List<TherapyPlan> selectedTherapyPlans = (List<TherapyPlan>) therapyPlanRepository.findAllById(selectedIds);
+
+            List<TherapyPlan> selectedTherapyPlans;
+
+            if (selectedIds != null && !selectedIds.isEmpty()) {
+                selectedTherapyPlans = (List<TherapyPlan>) therapyPlanRepository.findAllById(selectedIds);
+            } else {
+                selectedTherapyPlans = new ArrayList<>();
+            }
 
             for (TherapyPlan therapyPlan : selectedTherapyPlans) {
                 Therapy newTherapy = createTherapyFromPlan(therapyPlan, currentUser, newRecord);
                 newTherapy.setIregular(false);
                 therapyRepository.save(newTherapy);
             }
+
+            /*List<TherapyPlan> selectedTherapyPlans = (List<TherapyPlan>) therapyPlanRepository.findAllById(selectedIds);
+
+            for (TherapyPlan therapyPlan : selectedTherapyPlans) {
+                Therapy newTherapy = createTherapyFromPlan(therapyPlan, currentUser, newRecord);
+                newTherapy.setIregular(false);
+                therapyRepository.save(newTherapy);
+            }
+
+             */
         }
 
         // Case 3: emergencyCheck is checked and iregularCheck is checked
