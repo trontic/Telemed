@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="d-flex justify-content-left align-items-center form-check form-switch">
-                <label class="form-check-label m-2" for="adviceSwitch">Savjeti za mjerenje tlaka (uključi/isključi)</label>
+                <label class="form-check-label m-2" for="adviceSwitch">Savjeti za mjerenje tlaka</label>
                 <input class="form-check-input m-2 me-auto" type="checkbox" id="adviceSwitch">
             </div>
             <div class="advice-text mt-3" style="display: none; max-width: 700px;">
@@ -51,7 +51,11 @@
                 </ul>
             </div>
             <form action="/addNewRecord">
-
+                <div class="d-flex justify-content-left align-items-center form-check form-switch">
+                    <label class="form-check-label m-2" for="emergencyCheck">Izvanredno mjerenje tlaka</label>
+                    <input class="form-check-input m-2 me-auto" type="checkbox" id="emergencyCheck" name="emergencyCheck" onchange="toggleEmergencyCheck() ">
+                </div>
+                <input type="hidden" name="emergency" th:value="${emergencyCheck != null && emergencyCheck}" />
 
                 <div class="form-group row">
                     <div class="col-12">
@@ -64,7 +68,46 @@
                     </div>
                     <div class="col-12">
                         <label for="heartRate" class="col-form-label">Puls:</label>
-                        <input type="number" class="form-control" id="heartRate" name="heartRate" placeholder="Unesite izmjereni broj otkucaja srca (u minuti)" min="50" max="110" required>
+                        <input type="number" class="form-control" id="heartRate" name="heartRate" placeholder="Unesite izmjereni broj otkucaja srca (u minuti)" min="5" max="250" required>
+                    </div>
+                    <div class="regular-therapy">
+                        <div class="d-flex justify-content-left align-items-center form-check form-switch form-group">
+                            <label class="form-check-label m-2" for="toggleCheckbox">Popijena sva kronična terapija</label>
+                            <input class="form-check-input m-2 me-auto" type="checkbox" id="toggleCheckbox" checked onchange="toggleTargetCheckboxes()">
+                        </div>
+                        <table id="patients" class="table table-md table-borderless table-hover align-middle">
+                            <thead>
+                            <tr>
+                                <th>Naziv lijeka</th>
+                                <th>Količina</th>
+                                <th>Vrijeme primjene</th>
+                                <th>Popijeno</th>
+                            </tr>
+                            </thead>
+                            <tbody class="table-group-divider text-nowrap form-group">
+                            <tr th:each="therapy : ${therapyPlanList}">
+                                <td th:text="${therapy.nameMedicine}">Primjer</td>
+                                <td th:text="${therapy.quantity}">Primjer</td>
+                                <td th:text="${therapy.dayPart}">Primjer</td>
+                                <td><input type="checkbox" name="selectedTherapyPlanIds" th:value="${therapy.id}" class="targetCheckbox" checked/></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex justify-content-left align-items-center form-check form-switch">
+                        <label class="form-check-label m-2" for="iregularCheck">Izvanredna terapija</label>
+                        <input class="form-check-input m-2 me-auto" type="checkbox" id="iregularCheck" name="iregularCheck" onchange="toggleTherapyMenu()">
+                    </div>
+                    <input type="hidden" name="iregular" th:value="${iregularCheck != null && iregularCheck}" />
+                    <div class="therapy-menu" style="display: none;">
+                        <div class="col-12">
+                            <label for="name" class="col-form-label">Naziv lijeka:</label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Unesite naziv lijeka" pattern="[a-zA-ZčćžšđČĆŽŠĐ-]+" disabled>
+                        </div>
+                        <div class="col-12">
+                            <label for="quantity" class="col-form-label">Količina:</label>
+                            <input type="number" step="any" class="form-control" id="quantity" name="quantity" placeholder="Unesite količinu" min="0.01" max="10" disabled>
+                        </div>
                     </div>
                     <div class="col-12">
                         <label for="note" class="col-form-label">Bilješka:</label>
@@ -78,30 +121,6 @@
                         <label for="time" class="col-form-label">Vrijeme:</label>
                         <input type="time" th:value="${currentTime}" class="form-control" id="time" name="time">
                     </div>
-                    <div class="d-flex justify-content-left align-items-center form-check form-switch form-group">
-                        <label class="form-check-label m-2" for="toggleCheckbox">Popijena sva kronična terapija</label>
-                        <input class="form-check-input m-2 me-auto" type="checkbox" id="toggleCheckbox" checked onchange="toggleTargetCheckboxes()">
-                    </div>
-                    <table id="patients" class="table table-md table-borderless table-hover align-middle">
-                        <thead>
-                        <tr>
-                            <th>Naziv lijeka</th>
-                            <th>Doza (u mg)</th>
-                            <th>Količina</th>
-                            <th>Vrijeme primjene</th>
-                            <th>Popijeno</th>
-                        </tr>
-                        </thead>
-                        <tbody class="table-group-divider text-nowrap form-group">
-                        <tr th:each="therapy : ${therapyPlanList}">
-                            <td th:text="${therapy.nameMedicine}">Primjer</td>
-                            <td th:text="${therapy.dosage}">Primjer</td>
-                            <td th:text="${therapy.quantity}">Primjer</td>
-                            <td th:text="${therapy.dayPart}">Primjer</td>
-                            <td><input type="checkbox" name="selectedTherapyPlanIds" th:value="${therapy.id}" class="targetCheckbox" checked/></td>
-                        </tr>
-                        </tbody>
-                    </table>
                     <div class="input-group mt-3">
                         <button class="btn btn-og btn-primary col-12 mb-2" type="submit">Spremi</button>
                     </div>
@@ -113,3 +132,4 @@
 <script src="script.js"></script>
 </body>
 </html>
+

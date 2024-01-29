@@ -3,6 +3,7 @@ package com.telemed.model;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Entity
 public class Record {
@@ -16,6 +17,8 @@ public class Record {
     private String note;
     private String date;
     private String time;
+    @Column(columnDefinition = "BOOLEAN DEFAULT false")
+    private boolean emergency;
 
 
     @ManyToOne
@@ -100,4 +103,8 @@ public class Record {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public boolean getEmergency() {return emergency;}
+
+    public void setEmergency(boolean emergency) { this.emergency = emergency;}
 }

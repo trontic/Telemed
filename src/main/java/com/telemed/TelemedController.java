@@ -16,10 +16,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.chrono.ChronoLocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import org.springframework.data.domain.Sort;
 
 
@@ -204,51 +202,58 @@ public class TelemedController {
 
     @GetMapping("/addNewRecord")
     String addNewRecord(@RequestParam("sysPressure") int sysPressure, @RequestParam("diasPressure") int diasPressure,
-                        @RequestParam("heartRate") int heartRate,@RequestParam("note") String note,
-                        @RequestParam("date") String date,@RequestParam("time") String time, User user,
+                        @RequestParam("heartRate") int heartRate, @RequestParam("note") String note,
+                        @RequestParam("date") String date, @RequestParam("time") String time, User user,
                         @RequestParam(value = "selectedTherapyPlanIds", required = false) List<Integer> selectedIds,
+                        @RequestParam(value = "name", required = false) String name,
+                        @RequestParam(value = "quantity", required = false) Float quantity,
+                        @RequestParam(value = "emergencyCheck", required = false) boolean emergencyCheck,
+                        @RequestParam(value = "iregularCheck", required = false) boolean iregularCheck,
                         Model model) {
-        Record newRecord = new Record(sysPressure, diasPressure, heartRate, note, date, time, user);
-        newRecord.setUser(currentUser);
-        recordRepository.save(newRecord);
 
-        if (selectedIds != null && !selectedIds.isEmpty()) {
+
+        // Case 1: emergencyCheck is checked and iregularCheck is not checked
+        if (emergencyCheck && !iregularCheck) {
+            // Your logic for case 1
+            Record newRecord = new Record(sysPressure, diasPressure, heartRate, note, date, time, user);
+            newRecord.setEmergency(true);
+            newRecord.setUser(currentUser);
+            recordRepository.save(newRecord);
+        }
+
+        // Case 2: both emergencyCheck and iregularCheck are not checked
+        else if (!emergencyCheck && !iregularCheck) {
+            // Your logic for case 2
+            Record newRecord = new Record(sysPressure, diasPressure, heartRate, note, date, time, user);
+            newRecord.setEmergency(false);
+            newRecord.setUser(currentUser);
+            recordRepository.save(newRecord);
             List<TherapyPlan> selectedTherapyPlans = (List<TherapyPlan>) therapyPlanRepository.findAllById(selectedIds);
 
-            for(TherapyPlan therapyPlan : selectedTherapyPlans) {
+            for (TherapyPlan therapyPlan : selectedTherapyPlans) {
                 Therapy newTherapy = createTherapyFromPlan(therapyPlan, currentUser, newRecord);
+                newTherapy.setIregular(false);
                 therapyRepository.save(newTherapy);
             }
-        } else {
-            return "redirect:/records";
         }
 
-
-
-
-
-
-
-
-
-        /*
-        List<TherapyPlan> therapyPlanList = (List<TherapyPlan>)
-         therapyPlanRepository.findByUserAndDayPart(currentUser, calculateDayPart());
-
-        for(TherapyPlan therapyPlan1 : therapyPlanList) {
+        // Case 3: emergencyCheck is checked and iregularCheck is checked
+        else if (emergencyCheck && iregularCheck) {
+            // Your logic for case 3
+            Record newRecord = new Record(sysPressure, diasPressure, heartRate, note, date, time, user);
+            newRecord.setEmergency(true);
+            newRecord.setUser(currentUser);
+            recordRepository.save(newRecord);
             Therapy newTherapy = new Therapy();
-
-            newTherapy.setNameMedicine(therapyPlan1.getNameMedicine());
-            newTherapy.setDosage(therapyPlan1.getDosage());
-            newTherapy.setQuantity(therapyPlan1.getQuantity());
-            newTherapy.setDayPart(therapyPlan1.getDayPart());
-            newTherapy.setIregular(therapyPlan1.isIregular());
+            newTherapy.setNameMedicine(name);
+            newTherapy.setQuantity(quantity);
+            newTherapy.setDayPart(null);
+            newTherapy.setTime(time);
+            newTherapy.setIregular(true);
             newTherapy.setUser(currentUser);
             newTherapy.setRecord(newRecord);
-
             therapyRepository.save(newTherapy);
         }
-         */
 
         return "redirect:/records";
     }
@@ -317,8 +322,8 @@ public class TelemedController {
     }
 
     @GetMapping("/addNewTherapy")
-    String addNewTherapy(String name, float dosage, float quantity, String dayPart, boolean iregular, User user) {
-        TherapyPlan newTherapyPlan = new TherapyPlan(name, dosage, quantity, dayPart, iregular, user);
+    String addNewTherapy(String name, float quantity, String dayPart, boolean iregular, User user) {
+        TherapyPlan newTherapyPlan = new TherapyPlan(name, quantity, dayPart, iregular, user);
         newTherapyPlan.setUser(currentUser);
         therapyPlanRepository.save(newTherapyPlan);
         return "redirect:/patientEnterTherapy";
@@ -389,7 +394,6 @@ public class TelemedController {
     private Therapy createTherapyFromPlan(TherapyPlan plan, User user, Record record) {
         Therapy therapy = new Therapy();
         therapy.setNameMedicine(plan.getNameMedicine());
-        therapy.setDosage(plan.getDosage());
         therapy.setQuantity(plan.getQuantity());
         therapy.setDayPart(plan.getDayPart());
         therapy.setIregular(plan.isIregular());

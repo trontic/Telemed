@@ -104,15 +104,15 @@
                 <tr>
                     <th>Datum</th>
                     <th>Vrijeme</th>
-                    <th>Tlak - sistolički (mmHg)</th>
-                    <th>Tlak - dijastolički (mmHg)</th>
-                    <th>Otkucaji srca (u min)</th>
+                    <th>Tlak sist.</th>
+                    <th>Tlak dijast.</th>
+                    <th>Puls</th>
                     <th>Bilješka</th>
                     <th>Terapija</th>
                 </tr>
                 </thead>
                 <tbody class="table-group-divider text-nowrap">
-                <tr th:each="record : ${recordList}">
+                <tr th:each="record : ${recordList}" th:class="${record.emergency} ? 'table-danger' : ''">
                     <td th:text="${record.date}">Primjer</td>
                     <td th:text="${record.time}">Primjer</td>
                     <td th:text="${record.sysPressure}">Primjer</td>

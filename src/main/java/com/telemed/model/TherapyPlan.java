@@ -9,7 +9,6 @@ public class TherapyPlan {
     @GeneratedValue
     private int id;
     private String nameMedicine;
-    private float dosage;
     private float quantity;
     private String dayPart;
     private boolean iregular;
@@ -21,9 +20,8 @@ public class TherapyPlan {
     public TherapyPlan() {
     }
 
-    public TherapyPlan(String nameMedicine, float dosage, float quantity, String dayPart, boolean iregular, User user) {
+    public TherapyPlan(String nameMedicine, float quantity, String dayPart, boolean iregular, User user) {
         this.nameMedicine = nameMedicine;
-        this.dosage = dosage;
         this.quantity = quantity;
         this.dayPart = dayPart;
         this.user = user;
@@ -45,14 +43,6 @@ public class TherapyPlan {
 
     public void setNameMedicine(String name) {
         this.nameMedicine = nameMedicine;
-    }
-
-    public float getDosage() {
-        return dosage;
-    }
-
-    public void setDosage(float dosage) {
-        this.dosage = dosage;
     }
 
     public float getQuantity() {

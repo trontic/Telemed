@@ -33,7 +33,6 @@
                 <thead>
                 <tr>
                     <th>Naziv lijeka</th>
-                    <th>Doza (mg)</th>
                     <th>Kol.</th>
                     <th>Vrijeme primj.</th>
                     <th>Obriši</th>
@@ -42,7 +41,6 @@
                 <tbody class="table-group-divider text-nowrap">
                 <tr th:each="therapy : ${therapyPlanList}">
                     <td th:text="${therapy.nameMedicine}">Primjer</td>
-                    <td th:text="${therapy.dosage}">Primjer</td>
                     <td th:text="${therapy.quantity}">Primjer</td>
                     <td th:text="${therapy.dayPart}">Primjer</td>
                     <td><a th:href="@{'/deleteTherapy?id='+ ${therapy.id}}"><img src="images/trash_can.png" class="img-fluid" style="width: 20px;"></a></td>
@@ -55,10 +53,6 @@
                     <div class="col-12">
                         <label for="name" class="col-form-label">Naziv lijeka:</label>
                         <input type="text" class="form-control" id="name" name="name" placeholder="Unesite naziv lijeka" pattern="[a-zA-ZčćžšđČĆŽŠĐ-]+" required>
-                    </div>
-                    <div class="col-12">
-                        <label for="dosage" class="col-form-label">Doza:</label>
-                        <input type="number" step="any" class="form-control" id="dosage" name="dosage" placeholder="Unesite dozu (u mg)" min="0.01" max="5000" required>
                     </div>
                     <div class="col-12">
                         <label for="quantity" class="col-form-label">Količina:</label>
