@@ -3,6 +3,7 @@ package com.telemed.model;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Entity
 public class Record {
@@ -28,7 +29,7 @@ public class Record {
 
     }
 
-    public Record(int sysPressure, int diasPressure, int heartRate, String note, String date, String time, User user, boolean emergency) {
+    public Record(int sysPressure, int diasPressure, int heartRate, String note, String date, String time, User user) {
         this.sysPressure = sysPressure;
         this.diasPressure = diasPressure;
         this.heartRate = heartRate;
@@ -36,7 +37,6 @@ public class Record {
         this.date = date;
         this.time = time;
         this.user = user;
-        this.emergency = emergency;
 
     }
 

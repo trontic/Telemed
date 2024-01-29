@@ -58,9 +58,8 @@
                     <th>MBO</th>
                     <th>Broj mobitela</th>
                     <th>Email</th>
-
                     <th>Uredi</th>
-                    <th>Obriši</th>
+                    <!--<th>Obriši</th>-->
                     <th>Pregledaj</th>
                 </tr>
                 </thead>
@@ -74,7 +73,7 @@
                     <td th:text="${user.email}">Primjer</td>
 
                     <td><a th:href="@{'/showEditPatient?id='+ ${user.id}}"><img src="images/edit.png" class="img-fluid" style="width: 20px;"></a></td>
-                    <td><a th:href="@{'/deleteUser?id='+ ${user.id}}"><img src="images/trash_can.png" class="img-fluid" style="width: 20px;"></a></td>
+                    <!--<td><a th:href="@{'/deleteUser?id='+ ${user.id}}"><img src="images/trash_can.png" class="img-fluid" style="width: 20px;"></a></td>-->
                     <td><a th:href="@{'/showPatientOverview?id='+ ${user.id}}"><img src="images/view.png" class="img-fluid" style="width: 20px;"></a></td>
                 </tr>
                 </tbody>

@@ -44,7 +44,7 @@
                     <th>Puls</th>
                     <th>Bilješka</th>
                     <th>Uredi</th>
-                    <th>Obriši</th>
+                    <!--<th>Obriši</th>-->
                 </tr>
                 </thead>
                 <tbody class="table-group-divider text-nowrap">
@@ -56,7 +56,7 @@
                     <td th:text="${record.heartRate}">Primjer</td>
                     <td th:text="${record.note}">Primjer</td>
                     <td><a th:href="@{'/showEditRecord?id='+ ${record.id}}"><img src="images/edit.png" class="img-fluid" style="width: 20px;"></a></td>
-                    <td><a th:href="@{'/deleteRecord?id='+ ${record.id}}"><img src="images/trash_can.png" class="img-fluid" style="width: 20px;"></a></td>
+                    <!--<td><a th:href="@{'/deleteRecord?id='+ ${record.id}}"><img src="images/trash_can.png" class="img-fluid" style="width: 20px;"></a></td>-->
                 </tr>
                 </tbody>
             </table>
