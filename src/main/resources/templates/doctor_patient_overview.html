@@ -63,43 +63,71 @@
                     <button onclick="window.location.href='login'" class="btn btn-outline-danger" type="button">Odjava</button>
                 </div>
             </div>
-            <h3>Pregled dnevnika tlaka</h3>
-            <form class="row mb-2">
-                <div class="row">
-                    <div class="col-2 mb-2">
-                        <label for="fname" class="col-form-label">Ime:</label>
-                    </div>
-                    <div class="col-auto mb-2">
-                        <input th:value="${user.fname}" type="text" class="form-control" id="fname" name="fname" disabled>
-                    </div>
+            <div class="row">
+                <div class="col-6">
+                    <h3>Pregled dnevnika tlaka</h3>
                 </div>
-                <div class="row">
-                    <div class="col-2 mb-2">
-                        <label for="lname" class="form-label">Prezime:</label>
-                    </div>
-                    <div class="col-auto mb-2">
-                        <input th:value="${user.lname}" type="text" class="form-control" id="lname" name="lname" disabled>
-                    </div>
+                <div class="col-6">
+                    <h5>Pregled kronične terapije</h5>
                 </div>
-                <div class="row">
-                    <div class="col-2 mb-2">
-                        <label for="birthday" class="form-label">Datum rođenja:</label>
-                    </div>
-                    <div class="col-auto mb-2">
-                        <input th:value="${user.birthday}" type="text" class="form-control" id="birthday" name="birthday" disabled>
-                    </div>
-                </div >
-                <div class="row">
-                    <div class="col-2 mb-2">
-                        <label for="mbo" class="form-label">MBO:</label>
-                    </div>
-                    <div class="col-auto mb-2">
-                        <input th:value="${user.mbo}" type="text" class="form-control" id="mbo" name="mbo" disabled>
-                    </div>
+            </div>
+            <div class="row">
+                <div class="col-6 left-block">
+                    <form class="row mb-2">
+                        <div class="row">
+                            <div class="col-2 mb-2">
+                                <label for="fname" class="col-form-label">Ime:</label>
+                            </div>
+                            <div class="col-auto mb-2">
+                                <input th:value="${user.fname}" type="text" class="form-control" id="fname" name="fname" disabled>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2 mb-2">
+                                <label for="lname" class="form-label">Prezime:</label>
+                            </div>
+                            <div class="col-auto mb-2">
+                                <input th:value="${user.lname}" type="text" class="form-control" id="lname" name="lname" disabled>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2 mb-2">
+                                <label for="birthday" class="form-label">Datum rođenja:</label>
+                            </div>
+                            <div class="col-auto mb-2">
+                                <input th:value="${user.birthday}" type="text" class="form-control" id="birthday" name="birthday" disabled>
+                            </div>
+                        </div >
+                        <div class="row">
+                            <div class="col-2 mb-2">
+                                <label for="mbo" class="form-label">MBO:</label>
+                            </div>
+                            <div class="col-auto mb-2">
+                                <input th:value="${user.mbo}" type="text" class="form-control" id="mbo" name="mbo" disabled>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-
-            </form>
-            <table id="patients" class="table table-md table-borderless table-hover align-middle">
+                <div class="col-6 right-block">
+                    <table id="patients" class="table table-md table-borderless table-hover align-middle">
+                        <thead>
+                        <tr>
+                            <th>Naziv lijeka</th>
+                            <th>Kol.</th>
+                            <th>Vrijeme primj.</th>
+                        </tr>
+                        </thead>
+                        <tbody class="table-group-divider text-nowrap">
+                        <tr th:each="therapy : ${therapyPlanList}">
+                            <td th:text="${therapy.nameMedicine}">Primjer</td>
+                            <td th:text="${therapy.quantity}">Primjer</td>
+                            <td th:text="${therapy.dayPart}">Primjer</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <table id="patient" class="table table-md table-borderless table-hover align-middle">
                 <thead>
                 <tr>
                     <th>Datum</th>
@@ -108,7 +136,7 @@
                     <th>Tlak dijast.</th>
                     <th>Puls</th>
                     <th>Bilješka</th>
-                    <th>Terapija</th>
+                    <!--<th>Terapija</th>-->
                 </tr>
                 </thead>
                 <tbody class="table-group-divider text-nowrap">
@@ -121,40 +149,10 @@
                     <td th:text="${record.note}">Primjer</td>
                     <input type="number" id="myElement" th:data-myvalue="${record.id}" hidden>
                     <!--<td><a><img src="images/pill.png" class="img-fluid" data-toggle="modal" data-target="#myModal" style="width: 20px;"></a></td> -->
-                    <td><button type="button" onclick="function()" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Prikaži</button></td>
+                    <!--<td><button type="button" onclick="function()" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Prikaži</button></td>-->
                 </tr>
                 </tbody>
             </table>
-
-            <div class="modal" id="myModal">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-
-                        <!-- Modal body -->
-                        <div class="modal-body">
-                            <table class="table table-striped align-middle">
-                                <thead>
-                                <tr>
-                                    <th>Naziv lijeka</th>
-                                    <th>Doza (mg)</th>
-                                    <th>Količina</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="therapy : ${therapyList}">
-                                    <td th:text="${therapy.nameMedicine}">Primjer</td>
-                                    <td th:text="${therapy.dosage}">Primjer</td>
-                                    <td th:text="${therapy.quantity}">Primjer</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-
-                    </div>
-                </div>
-            </div>
-
 
         </div>
     </div>

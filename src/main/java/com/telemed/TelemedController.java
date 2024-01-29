@@ -133,6 +133,7 @@ public class TelemedController {
         model.addAttribute("recordList", recordRepository.findAllByUser(user, sort));
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("user", user);
+        model.addAttribute(therapyPlanRepository.findAllByUser(user));
         return "doctor_patient_overview.html";
     }
 
