@@ -48,7 +48,7 @@
                 </tr>
                 </thead>
                 <tbody class="table-group-divider text-nowrap">
-                <tr th:each="record : ${recordList}">
+                <tr th:each="record : ${recordPage.content}">
                     <td th:text="${record.date}">Primjer</td>
                     <td th:text="${record.time}">Primjer</td>
                     <td th:text="${record.sysPressure}">Primjer</td>
@@ -60,6 +60,20 @@
                 </tr>
                 </tbody>
             </table>
+            <div th:if="${recordPage.totalPages > 1}">
+                <ul class="pagination">
+                    <li th:if="${recordPage.hasPrevious}" class="page-item">
+                        <a class="page-link" th:href="@{'/records?page=' + ${recordPage.number - 1}}">Prethodna</a>
+                    </li>
+                    <li th:each="i : ${#numbers.sequence(0, recordPage.totalPages - 1)}" class="page-item"
+                        th:classappend="${i == recordPage.number} ? 'active'">
+                        <a class="page-link" th:href="@{'/records?page=' + ${i}}">[[${i + 1}]]</a>
+                    </li>
+                    <li th:if="${recordPage.hasNext}" class="page-item">
+                        <a class="page-link" th:href="@{'/records?page=' + ${recordPage.number + 1}}">Sljedeća</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

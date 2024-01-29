@@ -6,6 +6,9 @@ import com.telemed.tools.EmailSender;
 import io.micrometer.common.util.StringUtils;
 import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -193,10 +196,13 @@ public class TelemedController {
 
 
     @GetMapping("/records")
-    public String records(Model model) {
+    public String records(Model model, @RequestParam(defaultValue = "0") int page) {
+        int pageSize = 5;
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "id"));
+        Page<Record> recordPage = recordRepository.findAllByUser(currentUser, pageable);
+
         model.addAttribute("currentUser", currentUser);
-        Sort sort = Sort.by(Sort.Direction.DESC, "id");
-        model.addAttribute("recordList", recordRepository.findAllByUser(currentUser, sort));
+        model.addAttribute("recordPage", recordPage);
         return "patient_home.html";
     }
 
