@@ -49,8 +49,12 @@ public class TelemedController {
 
 
     @GetMapping("/patients")
-    public String showPatients(Model model) {
-        model.addAttribute(userRepository.findByType(0));
+    public String showPatients(Model model, @RequestParam(defaultValue = "0") int page) {
+        int pageSize = 5;
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.ASC, "id")); // You can change the sorting as needed
+        Page<User> userPage = userRepository.findAll(pageable);
+
+        model.addAttribute("userPage", userPage);
         model.addAttribute("currentUser", currentUser);
         return "doctor_home.html";
     }

@@ -64,7 +64,7 @@
                 </tr>
                 </thead>
                 <tbody class="table-group-divider text-nowrap">
-                <tr th:each="user : ${userList}">
+                <tr th:each="user : ${userPage.content}">
                     <td th:text="${user.fname}">Primjer</td>
                     <td th:text="${user.lname}">Primjer</td>
                     <td th:text="${user.birthday}">Primjer</td>
@@ -78,6 +78,20 @@
                 </tr>
                 </tbody>
             </table>
+            <div th:if="${userPage.totalPages > 1}" class="d-flex justify-content-center">
+                <ul class="pagination">
+                    <li th:if="${userPage.hasPrevious}" class="page-item">
+                        <a class="page-link" th:href="@{'/patients?page=' + ${userPage.number - 1}}">Prethodna</a>
+                    </li>
+                    <li th:each="i : ${#numbers.sequence(0, userPage.totalPages - 1)}" class="page-item"
+                        th:classappend="${i == userPage.number} ? 'active'">
+                        <a class="page-link" th:href="@{'/patients?page=' + ${i}}" th:text="${i + 1}"></a>
+                    </li>
+                    <li th:if="${userPage.hasNext}" class="page-item">
+                        <a class="page-link" th:href="@{'/patients?page=' + ${userPage.number + 1}}">Sljedeća</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

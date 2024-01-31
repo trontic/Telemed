@@ -1,5 +1,7 @@
 package com.telemed.model;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,4 +18,5 @@ public interface UserRepositoryDB extends CrudRepository<User, Integer> {
     User findUserById(int id);
 
     List<User> findByLname(String lname);
+    Page<User> findAll(Pageable pageable);
 }
