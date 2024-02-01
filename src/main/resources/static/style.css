@@ -15,13 +15,13 @@ body{
 }
 
 
-h3{
+h3, h5{
     color: #6e6e6e;
 }
 
 a{
     text-decoration: none;
-    color: inherit;
+    color: #2b98af;
 }
 
 #patients th {
@@ -31,6 +31,16 @@ a{
 }
 
 #patients td {
+    color: #6E6E6E;
+}
+
+#patient th {
+    background-color: #2b98af;
+    color: white;
+    font-weight: 1;
+}
+
+#patient td {
     color: #6E6E6E;
 }
 
