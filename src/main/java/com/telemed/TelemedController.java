@@ -64,8 +64,73 @@ public class TelemedController {
         return "redirect:/patients";
     }
 
+    @GetMapping("/patientRegistration")
+    String patientRegistration(@RequestParam("fname") String fname,
+                               @RequestParam("lname") String lname,
+                               @RequestParam("birthday") String birthday,
+                               @RequestParam("mbo") int mbo,
+                               @RequestParam("number") String number,
+                               @RequestParam("email") String email,
+                               @RequestParam("password") String password,
+                               @RequestParam("confirmPassword") String confirmPassword,
+                               @RequestParam(value = "allowAccess", required = false) Boolean allowAccess,
+                               Model model) {
+
+        // Add form field values to the model to repopulate the form in case of an error
+        model.addAttribute("fname", fname);
+        model.addAttribute("lname", lname);
+        model.addAttribute("birthday", birthday);
+        model.addAttribute("mbo", mbo);
+        model.addAttribute("number", number);
+        model.addAttribute("email", email);
+        model.addAttribute("password", password);
+        model.addAttribute("confirmPassword", confirmPassword);
+        model.addAttribute("allowAccess", allowAccess);
+
+
+
+        // Check if the password length is less than 5 characters
+        if (StringUtils.isBlank(password) || password.length() < 5) {
+            model.addAttribute("passwordLengthError", true);
+            return "patient_registration.html";
+        }
+
+        // Check if passwords match
+        if (!password.equals(confirmPassword)) {
+            model.addAttribute("passwordMismatch", true);
+            return "patient_registration.html";
+        }
+
+        // Check if the checkbox for terms and conditions is unchecked
+        if (allowAccess == null || !allowAccess) {
+            model.addAttribute("accessError", true);
+            return "patient_registration.html";
+        }
+
+        // Create a new user and save it to the database
+        User newUser = new User(fname, lname, birthday, mbo, number, email, password, false);
+        newUser.setPasswordChanged();
+        userRepository.save(newUser);
+
+        // Set the current user (this depends on how you manage user sessions)
+        currentUser = newUser;
+
+        // Redirect to a different page after successful registration
+        return "redirect:/records";
+    }
+
     @GetMapping("/changePassword")
     String showChangePassword(Model model) {
+
+        //ispituje se mijenja li se password 1. put (obavezno) ili nakon toga
+
+        /* oba htmla - patient_password_change_after i patient_password_change zovu u formi metodu changePasswordAction */
+
+        // ako se ne mijenja prvi put, otvara se stranica za promjenu bez dopuštenja doktoru za privolom za podacima
+        if (currentUser.hasUpdatedPassword()) {
+            return "patient_password_change_after.html";
+        }
+        // mijenja se lozinka 1. put
         return "patient_password_change.html";
     }
 
@@ -74,34 +139,47 @@ public class TelemedController {
                                 @RequestParam("confirmPassword") String confirmPassword,
                                 @RequestParam(value = "allowAccess", required = false) Boolean allowAccess,
                                 Model model) {
+
         if (StringUtils.isBlank(newPassword) || newPassword.length() < 5) {
             model.addAttribute("passwordLengthError", true);
+            if(currentUser.hasUpdatedPassword()) {
+                return "patient_password_change_after.html";
+            }
             return "patient_password_change.html";
-        }
-
-        if (!newPassword.equals(confirmPassword)) {
+        } else if (!newPassword.equals(confirmPassword)) {
             model.addAttribute("passwordMismatch", true);
-            return "/patient_password_change.html";
-        } else {
-            if (newPassword.equals(currentUser.getPassword())) {
-                model.addAttribute("samePasswordError", true);
+            if(currentUser.hasUpdatedPassword()) {
+                return "patient_password_change_after.html";
+            }
+            return "patient_password_change.html";
+        } else if (newPassword.equals(currentUser.getPassword())) {
+            model.addAttribute("samePasswordError", true);
+            if(currentUser.hasUpdatedPassword()) {
+                return "patient_password_change_after.html";
+            }
+            return "patient_password_change.html";
+            // prijavio se korisnik po prvi puta i mijenja password (passwordUpdated=false)
+        } else if (!currentUser.hasUpdatedPassword()) {
+            System.out.println("Passw:" + currentUser.hasUpdatedPassword());
+            if (allowAccess == null || !allowAccess) {
+                model.addAttribute("accessError", true);
+                model.addAttribute("newPassword", newPassword);
+                model.addAttribute("confirmPassword", confirmPassword);
                 return "patient_password_change.html";
-            } else {
-                if (allowAccess == null || !allowAccess) {
-                    model.addAttribute("accessError", true);
-                    model.addAttribute("newPassword", newPassword);
-                    model.addAttribute("confirmPassword", confirmPassword);
-                    return "patient_password_change.html";
-                }
-
-                currentUser.setPassword(newPassword);
-                currentUser.setPasswordChanged();
-                userRepository.save(currentUser);
-
-                return "redirect:/records";
             }
         }
+        currentUser.setPassword(newPassword);
+        // set password postaje true
+        currentUser.setPasswordChanged();
+        userRepository.save(currentUser);
+        return "redirect:/records";
     }
+
+    @GetMapping("/registration")
+    public String registration() {
+        return "patient_registration.html";
+    }
+
 
     @GetMapping("/showEditPatient")
     String showEditUser(int id, Model model) {
@@ -156,7 +234,7 @@ public class TelemedController {
         User user = userRepository.findByEmailAndPassword(email, password);
 
         if (user == null) {
-            model.addAttribute("userMessage", "Korisnik nije pronađen!");
+            model.addAttribute("userMessage", "Pogrešna email adresa ili lozinka!");
             model.addAttribute("email", email);
             model.addAttribute("password", password);
             return "login.html";
@@ -419,4 +497,6 @@ public class TelemedController {
         therapy.setRecord(record);
         return therapy;
     }
+
+
 }
