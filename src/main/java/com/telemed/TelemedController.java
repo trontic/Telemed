@@ -134,10 +134,14 @@ public class TelemedController {
     }
 
     @GetMapping("/showPatientOverview")
-    String showPatientOverview(int id, Model model) {
+    String showPatientOverview(int id, Model model, @RequestParam(defaultValue = "0") int page) {
         User user = userRepository.findUserById(id);
+        int pageSize = 5;
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
-        model.addAttribute("recordList", recordRepository.findAllByUser(user, sort));
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "id"));
+        Page<Record> recordPage = recordRepository.findAllByUser(user, pageable);
+
+        model.addAttribute("recordPage", recordPage);
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("user", user);
         return "doctor_patient_overview.html";
