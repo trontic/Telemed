@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>eDnevnik tlaka - Mjerenja</title>
 </head>
 <body>
@@ -13,20 +13,30 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-sm-12 col-md-8 col-lg-6">
+            <!-- Top Navigation Menu -->
+            <div class="topnav">
+                <a th:href="@{'/records'}" class="active" id="heading-menu">eDnevnik tlaka</a>
+                <!-- Navigation links (hidden by default) -->
+                <div id="myLinks">
+                    <a th:href="@{'/records'}"> Pregled mjerenja tlaka</a>
+                    <a th:href="@{'/patientNewRecord'}"> Unesi novo mjerenje</a>
+                    <a th:href="@{'/patientEnterTherapy'}"> Dodaj/uredi kroničnu terapiju</a>
+                    <a th:href="@{'/showEditPatientData'}"> Uredi moje podatke</a>
+                    <a th:href="@{'/changePassword'}"> Promijeni lozinku</a>
+                    <a th:href="@{'/login'}"> Odjava</a>
+                </div>
+                <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
+                <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
             <div class="pt-2">
-                <h1 class="centered-text custom-color">eDnevnik tlaka</h1>
                 <div class="centered-text row mb-2 custom-color fs-4">
                     <span>Unos mjerenja tlaka</span>
                 </div>
-                <div class="centered-text custom-color fs-1">
+                <div class="centered-text custom-color fs-3">
                     <span th:text="${currentUser.getFname()}"></span>
                     <span th:text="${currentUser.getLname()}"></span>
-                </div>
-            </div>
-            <div class="row mb-2">
-                <div class="d-grid gap-2">
-                    <button onclick="window.location.href='records'" class="btn btn-outline-primary" type="button">Početna stranica</button>
-                    <button onclick="window.location.href='login'" class="btn btn-outline-danger" type="button">Odjava</button>
                 </div>
             </div>
             <div class="d-flex justify-content-left align-items-center form-check form-switch">
@@ -120,7 +130,7 @@
                         <label for="time" class="col-form-label">Vrijeme:</label>
                         <input type="time" th:value="${currentTime}" class="form-control" id="time" name="time">
                     </div>
-                    <div class="input-group mt-3">
+                    <div class="input-group mt-4">
                         <button class="btn btn-og btn-primary col-12 mb-2" type="submit">Spremi</button>
                     </div>
                 </div>

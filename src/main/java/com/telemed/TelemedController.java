@@ -49,10 +49,10 @@ public class TelemedController {
 
 
     @GetMapping("/patients")
-    public String showPatients(Model model, @RequestParam(defaultValue = "0") int page) {
-        int pageSize = 5;
+    public String showPatients(Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "0") int type) {
+        int pageSize = 10;
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.ASC, "id")); // You can change the sorting as needed
-        Page<User> userPage = userRepository.findAll(pageable);
+        Page<User> userPage = userRepository.findByType(type, pageable);
 
         model.addAttribute("userPage", userPage);
         model.addAttribute("currentUser", currentUser);
@@ -128,6 +128,7 @@ public class TelemedController {
 
     @GetMapping("/changePassword")
     String showChangePassword(Model model) {
+        model.addAttribute("currentUser", currentUser);
 
         //ispituje se mijenja li se password 1. put (obavezno) ili nakon toga
 
@@ -146,6 +147,7 @@ public class TelemedController {
                                 @RequestParam("confirmPassword") String confirmPassword,
                                 @RequestParam(value = "allowAccess", required = false) Boolean allowAccess,
                                 Model model) {
+        model.addAttribute("currentUser", currentUser);
 
         if (StringUtils.isBlank(newPassword) || newPassword.length() < 5) {
             model.addAttribute("passwordLengthError", true);
@@ -214,7 +216,7 @@ public class TelemedController {
     @GetMapping("/showPatientOverview")
     String showPatientOverview(int id, Model model, @RequestParam(defaultValue = "0") int page) {
         User user = userRepository.findUserById(id);
-        int pageSize = 5;
+        int pageSize = 10;
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "id"));
         Page<Record> recordPage = recordRepository.findAllByUser(user, pageable);
@@ -284,7 +286,7 @@ public class TelemedController {
 
     @GetMapping("/records")
     public String records(Model model, @RequestParam(defaultValue = "0") int page) {
-        int pageSize = 5;
+        int pageSize = 10;
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "id"));
         Page<Record> recordPage = recordRepository.findAllByUser(currentUser, pageable);
 
@@ -454,8 +456,7 @@ public class TelemedController {
     }
 
     @GetMapping("/editPatientData")
-    String editUserData(String fname, String lname, String birthday, int mbo, String number, String email,
-                        String password, Model model) {
+    String editUserData(String fname, String lname, String birthday, int mbo, String number, String email, Model model) {
         User user = currentUser;
         user.setFname(fname);
         user.setLname(lname);
@@ -463,7 +464,6 @@ public class TelemedController {
         user.setMbo(mbo);
         user.setNumber(number);
         user.setEmail(email);
-        user.setPassword(password);
         userRepository.save(user);
         System.out.println("Korisnik " + fname + " " + lname + " je ažuriran.");
         return "redirect:/records";

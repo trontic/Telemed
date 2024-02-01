@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="script.js"></script>
     <title>eDnevnik tlaka - Početna stranica</title>
 </head>
@@ -13,22 +14,30 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-sm-12 col-md-8 col-lg-6">
+            <!-- Top Navigation Menu -->
+            <div class="topnav">
+                <a th:href="@{'/records'}" class="active" id="heading-menu">eDnevnik tlaka</a>
+                <!-- Navigation links (hidden by default) -->
+                <div id="myLinks">
+                    <a th:href="@{'/records'}"> Pregled mjerenja tlaka</a>
+                    <a th:href="@{'/patientNewRecord'}"> Unesi novo mjerenje</a>
+                    <a th:href="@{'/patientEnterTherapy'}"> Dodaj/uredi kroničnu terapiju</a>
+                    <a th:href="@{'/showEditPatientData'}"> Uredi moje podatke</a>
+                    <a th:href="@{'/changePassword'}"> Promijeni lozinku</a>
+                    <a th:href="@{'/login'}"> Odjava</a>
+                </div>
+                <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
+                <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
             <div class="pt-2">
-                <h1 class="centered-text custom-color">eDnevnik tlaka</h1>
                 <div class="centered-text row mb-2 custom-color fs-4">
                     <span>Pregled mjerenja tlaka</span>
                 </div>
-                <div class="centered-text custom-color fs-1">
+                <div class="centered-text custom-color fs-3">
                     <span th:text="${currentUser.getFname()}"></span>
                     <span th:text="${currentUser.getLname()}"></span>
-                </div>
-            </div>
-            <div class="row mb-2">
-                <div class="d-grid gap-2">
-                    <button onclick="window.location.href='patientEnterTherapy'" class="btn btn-outline-primary" type="button">Dodaj/uredi kroničnu terapiju</button>
-                    <button onclick="window.location.href='patientNewRecord'" class="btn btn-outline-primary" type="button">Unesi novo mjerenje</button>
-                    <button onclick="window.location.href='showEditPatientData'" class="btn btn-outline-primary" type="button">Uredi moje podatke</button>
-                    <button onclick="window.location.href='login'" class="btn btn-outline-danger" type="button">Odjava</button>
                 </div>
             </div>
             <div class="row mb-2 custom-color fs-6">
@@ -60,19 +69,21 @@
                 </tr>
                 </tbody>
             </table>
-            <div th:if="${recordPage.totalPages > 1}">
-                <ul class="pagination">
-                    <li th:if="${recordPage.hasPrevious}" class="page-item">
-                        <a class="page-link" th:href="@{'/records?page=' + ${recordPage.number - 1}}">Prethodna</a>
-                    </li>
-                    <li th:each="i : ${#numbers.sequence(0, recordPage.totalPages - 1)}" class="page-item"
-                        th:classappend="${i == recordPage.number} ? 'active'">
-                        <a class="page-link" th:href="@{'/records?page=' + ${i}}">[[${i + 1}]]</a>
-                    </li>
-                    <li th:if="${recordPage.hasNext}" class="page-item">
-                        <a class="page-link" th:href="@{'/records?page=' + ${recordPage.number + 1}}">Sljedeća</a>
-                    </li>
-                </ul>
+            <div class="d-flex justify-content-center">
+                <div th:if="${recordPage.totalPages > 1}">
+                    <ul class="pagination">
+                        <li th:if="${recordPage.hasPrevious}" class="page-item">
+                            <a class="page-link" th:href="@{'/records?page=' + ${recordPage.number - 1}}">Prethodna</a>
+                        </li>
+                        <li th:each="i : ${#numbers.sequence(0, recordPage.totalPages - 1)}" class="page-item"
+                            th:classappend="${i == recordPage.number} ? 'active'">
+                            <a class="page-link" th:href="@{'/records?page=' + ${i}}">[[${i + 1}]]</a>
+                        </li>
+                        <li th:if="${recordPage.hasNext}" class="page-item">
+                            <a class="page-link" th:href="@{'/records?page=' + ${recordPage.number + 1}}">Sljedeća</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

@@ -50,27 +50,6 @@ function updateTargetCheckboxes(state) {
     }
 }
 
-/*
-function toggleTherapyMenu() {
-    var therapyMenu = document.querySelector('.therapy-menu');
-    var nameInput = document.getElementById('name');
-    var quantityInput = document.getElementById('quantity');
-
-    // Check if the checkbox is checked
-    if (document.getElementById('iregularCheck').checked) {
-        therapyMenu.style.display = 'block'; // Show the therapy menu
-        nameInput.disabled = false;          // Enable name input
-        quantityInput.disabled = false;      // Enable quantity input
-
-    } else {
-        therapyMenu.style.display = 'none';  // Hide the therapy menu
-        nameInput.disabled = true;           // Disable name input
-        quantityInput.disabled = true;       // Disable quantity input
-
-    }
-}
-*/
-
 function toggleTherapyMenu() {
     var checkbox = document.getElementById("iregularCheck");
     var nameInput = document.getElementById("name");
@@ -93,3 +72,12 @@ function toggleTherapyMenu() {
         quantityInput.removeAttribute("required");
     }
 }
+
+function myFunction() {
+    var x = document.getElementById("myLinks");
+    if (x.style.display === "block") {
+      x.style.display = "none";
+    } else {
+      x.style.display = "block";
+    }
+  }

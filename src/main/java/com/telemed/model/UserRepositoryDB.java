@@ -13,10 +13,11 @@ public interface UserRepositoryDB extends CrudRepository<User, Integer> {
 
     User findByEmailAndPassword(String email, String password);
 
-    List<User> findByType(int type);
+    //List<User> findByType(int type);
 
     User findUserById(int id);
 
     List<User> findByLname(String lname);
     Page<User> findAll(Pageable pageable);
+    Page<User> findByType(int type, Pageable pageable);
 }

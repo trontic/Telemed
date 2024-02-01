@@ -61,3 +61,51 @@ a{
 .custom-color {
     color: #5c5c5c
 }
+
+/* Style the navigation menu */
+.topnav {
+  overflow: hidden;
+  background-color: #DEDEDE;
+  position: relative;
+}
+
+/* Hide the links inside the navigation menu (except for logo/home) */
+.topnav #myLinks {
+  display: none;
+}
+
+/* Style navigation menu links */
+.topnav a {
+  color: #6E6E6E;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 19px;
+  display: block;
+}
+
+/* Style the hamburger menu */
+.topnav a.icon {
+  background: #C7C7C7;
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+/* Add a grey background color on mouse-over */
+.topnav a:hover {
+  background-color: #6E6E6E;
+  color: white;
+}
+
+/* Style the active link (or home/logo) */
+.active {
+  background-color: #2b98af;
+  color: white;
+}
+
+#heading-menu{
+    color: white;
+    text-align: center;
+    font-size: 19px;
+}
