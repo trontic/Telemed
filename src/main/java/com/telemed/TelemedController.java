@@ -68,9 +68,18 @@ public class TelemedController {
 
     @GetMapping("/changePassword")
     String showChangePassword(Model model) {
+
+        //ispituje se mijenja li se password 1. put (obavezno) ili nakon toga
+
+        /* oba htmla - patient_password_change_after i patient_password_change zovu u formi metodu changePasswordAction */
+
+        // ako se ne mijenja prvi put, otvara se stranica za promjenu bez dopuštenja doktoru za privolom za podacima
+        if (currentUser.hasUpdatedPassword()) {
+            return "patient_password_change_after.html";
+        }
+        // mijenja se lozinka 1. put
         return "patient_password_change.html";
     }
-
     @GetMapping("/changePasswordAction")
     String changePasswordAction(@RequestParam("password") String newPassword,
                                 @RequestParam("confirmPassword") String confirmPassword,
@@ -78,32 +87,43 @@ public class TelemedController {
                                 Model model) {
         if (StringUtils.isBlank(newPassword) || newPassword.length() < 5) {
             model.addAttribute("passwordLengthError", true);
+            if(currentUser.hasUpdatedPassword()) {
+                return "patient_password_change_after.html";
+            }
             return "patient_password_change.html";
         }
 
-        if (!newPassword.equals(confirmPassword)) {
+        else if (!newPassword.equals(confirmPassword)) {
             model.addAttribute("passwordMismatch", true);
+            if(currentUser.hasUpdatedPassword()) {
+                return "patient_password_change_after.html";
+            }
             return "/patient_password_change.html";
-        } else {
-            if (newPassword.equals(currentUser.getPassword())) {
+        } else if (newPassword.equals(currentUser.getPassword())) {
                 model.addAttribute("samePasswordError", true);
-                return "patient_password_change.html";
-            } else {
-                if (allowAccess == null || !allowAccess) {
-                    model.addAttribute("accessError", true);
-                    model.addAttribute("newPassword", newPassword);
-                    model.addAttribute("confirmPassword", confirmPassword);
-                    return "patient_password_change.html";
+                if(currentUser.hasUpdatedPassword()) {
+                    return "patient_password_change_after.html";
                 }
-
+                return "patient_password_change.html";
+            } else if (!currentUser.hasUpdatedPassword()) {
+            System.out.println("Passw:" + currentUser.hasUpdatedPassword());
+            if (allowAccess == null || !allowAccess) {
+                model.addAttribute("accessError", true);
+                model.addAttribute("newPassword", newPassword);
+                model.addAttribute("confirmPassword", confirmPassword);
+                return "patient_password_change.html";
+            }
+        }
                 currentUser.setPassword(newPassword);
                 currentUser.setPasswordChanged();
                 userRepository.save(currentUser);
 
                 return "redirect:/records";
             }
-        }
-    }
+
+
+
+
 
     @GetMapping("/showEditPatient")
     String showEditUser(int id, Model model) {
