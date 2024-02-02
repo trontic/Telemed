@@ -4,6 +4,7 @@ import com.telemed.model.*;
 import com.telemed.model.Record;
 import com.telemed.tools.EmailSender;
 import io.micrometer.common.util.StringUtils;
+import jakarta.servlet.http.HttpSession;
 import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,8 +29,6 @@ import org.springframework.data.domain.Sort;
 @Controller
 public class TelemedController {
 
-    User currentUser = null;
-
 
     @Autowired
     UserRepositoryDB userRepository;
@@ -49,11 +48,11 @@ public class TelemedController {
 
 
     @GetMapping("/patients")
-    public String showPatients(Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "0") int type) {
+    public String showPatients(Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "0") int type, HttpSession session) {
         int pageSize = 10;
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.ASC, "id")); // You can change the sorting as needed
         Page<User> userPage = userRepository.findByType(type, pageable);
-
+        User currentUser = (User) session.getAttribute("currentUser");
         model.addAttribute("userPage", userPage);
         model.addAttribute("currentUser", currentUser);
         return "doctor_home.html";
@@ -81,7 +80,7 @@ public class TelemedController {
                                @RequestParam("password") String password,
                                @RequestParam("confirmPassword") String confirmPassword,
                                @RequestParam(value = "allowAccess", required = false) Boolean allowAccess,
-                               Model model) {
+                               Model model, HttpSession session) {
 
         // Add form field values to the model to repopulate the form in case of an error
         model.addAttribute("fname", fname);
@@ -119,15 +118,20 @@ public class TelemedController {
         newUser.setPasswordChanged();
         userRepository.save(newUser);
 
+        session.setAttribute("currentUser", newUser);
+
+
+
         // Set the current user (this depends on how you manage user sessions)
-        currentUser = newUser;
+        //currentUser = newUser;
 
         // Redirect to a different page after successful registration
         return "redirect:/records";
     }
 
     @GetMapping("/changePassword")
-    String showChangePassword(Model model) {
+    String showChangePassword(Model model, HttpSession session) {
+        User currentUser = (User) session.getAttribute("currentUser");
         model.addAttribute("currentUser", currentUser);
 
         //ispituje se mijenja li se password 1. put (obavezno) ili nakon toga
@@ -146,7 +150,8 @@ public class TelemedController {
     String changePasswordAction(@RequestParam("password") String newPassword,
                                 @RequestParam("confirmPassword") String confirmPassword,
                                 @RequestParam(value = "allowAccess", required = false) Boolean allowAccess,
-                                Model model) {
+                                Model model, HttpSession session) {
+        User currentUser = (User) session.getAttribute("currentUser");
         model.addAttribute("currentUser", currentUser);
 
         if (StringUtils.isBlank(newPassword) || newPassword.length() < 5) {
@@ -191,9 +196,10 @@ public class TelemedController {
 
 
     @GetMapping("/showEditPatient")
-    String showEditUser(int id, Model model) {
+    String showEditUser(int id, Model model, HttpSession session) {
         User user = userRepository.findUserById(id);
         model.addAttribute("user", user);
+        User currentUser = (User) session.getAttribute("currentUser");
         model.addAttribute("currentUser", currentUser);
         return "doctor_edit_patient.html";
     }
@@ -214,7 +220,7 @@ public class TelemedController {
     }
 
     @GetMapping("/showPatientOverview")
-    String showPatientOverview(int id, Model model, @RequestParam(defaultValue = "0") int page) {
+    String showPatientOverview(int id, Model model, @RequestParam(defaultValue = "0") int page, HttpSession session) {
         User user = userRepository.findUserById(id);
         int pageSize = 10;
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
@@ -222,6 +228,7 @@ public class TelemedController {
         Page<Record> recordPage = recordRepository.findAllByUser(user, pageable);
 
         model.addAttribute("recordPage", recordPage);
+        User currentUser = (User) session.getAttribute("currentUser");
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("user", user);
         model.addAttribute(therapyPlanRepository.findAllByUser(user));
@@ -242,7 +249,7 @@ public class TelemedController {
 
     @GetMapping("/loginProcess")
     public String loginProcess(@RequestParam("email") String email,
-                               @RequestParam("password") String password, Model model){
+                               @RequestParam("password") String password, Model model, HttpSession session){
 
         User user = userRepository.findByEmailAndPassword(email, password);
 
@@ -252,7 +259,7 @@ public class TelemedController {
             model.addAttribute("password", password);
             return "login.html";
         } else {
-            currentUser = user;
+            session.setAttribute("currentUser", user);
 
             if (user.getType() == 0) {
                 if (!user.hasUpdatedPassword()) {
@@ -268,7 +275,8 @@ public class TelemedController {
 
 
     @GetMapping("/doctorNewPatient")
-    public String doctorNewPatient(Model model) {
+    public String doctorNewPatient(Model model, HttpSession session) {
+        User currentUser = (User) session.getAttribute("currentUser");
         model.addAttribute("currentUser", currentUser);
         return "doctor_new_patient.html";
     }
@@ -285,9 +293,10 @@ public class TelemedController {
 
 
     @GetMapping("/records")
-    public String records(Model model, @RequestParam(defaultValue = "0") int page) {
+    public String records(Model model, @RequestParam(defaultValue = "0") int page, HttpSession session) {
         int pageSize = 10;
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "id"));
+        User currentUser = (User) session.getAttribute("currentUser");
         Page<Record> recordPage = recordRepository.findAllByUser(currentUser, pageable);
 
         model.addAttribute("currentUser", currentUser);
@@ -297,20 +306,23 @@ public class TelemedController {
 
     @GetMapping("/addNewRecord")
     String addNewRecord(@RequestParam("sysPressure") int sysPressure, @RequestParam("diasPressure") int diasPressure,
-                        @RequestParam("heartRate") int heartRate, @RequestParam("note") String note,
+                        @RequestParam(value = "heartRate", required = false) Integer heartRate, @RequestParam("note") String note,
                         @RequestParam("date") String date, @RequestParam("time") String time, User user,
                         @RequestParam(value = "selectedTherapyPlanIds", required = false) List<Integer> selectedIds,
                         @RequestParam(value = "name", required = false) String name,
                         @RequestParam(value = "quantity", required = false) Float quantity,
                         @RequestParam(value = "emergencyCheck", required = false) boolean emergencyCheck,
                         @RequestParam(value = "iregularCheck", required = false) boolean iregularCheck,
-                        Model model) {
+                        Model model, HttpSession session) {
 
-
+        User currentUser = (User) session.getAttribute("currentUser");
         // Case 1: emergencyCheck is checked and iregularCheck is not checked
         if (emergencyCheck && !iregularCheck) {
             // Your logic for case 1
-            Record newRecord = new Record(sysPressure, diasPressure, heartRate, note, date, time, user);
+            Record newRecord = new Record(sysPressure, diasPressure, note, date, time, user);
+            if (heartRate != null) {
+                newRecord.setHeartRate(heartRate);
+            }
             newRecord.setEmergency(true);
             newRecord.setUser(currentUser);
             recordRepository.save(newRecord);
@@ -319,7 +331,10 @@ public class TelemedController {
         // Case 2: both emergencyCheck and iregularCheck are not checked
         else if (!emergencyCheck && !iregularCheck) {
             // Your logic for case 2
-            Record newRecord = new Record(sysPressure, diasPressure, heartRate, note, date, time, user);
+            Record newRecord = new Record(sysPressure, diasPressure, note, date, time, user);
+            if (heartRate != null) {
+                newRecord.setHeartRate(heartRate);
+            }
             newRecord.setEmergency(false);
             newRecord.setUser(currentUser);
             recordRepository.save(newRecord);
@@ -352,7 +367,10 @@ public class TelemedController {
         // Case 3: emergencyCheck is checked and iregularCheck is checked
         else if (emergencyCheck && iregularCheck) {
             // Your logic for case 3
-            Record newRecord = new Record(sysPressure, diasPressure, heartRate, note, date, time, user);
+            Record newRecord = new Record(sysPressure, diasPressure, note, date, time, user);
+            if (heartRate != null) {
+                newRecord.setHeartRate(heartRate);
+            }
             newRecord.setEmergency(true);
             newRecord.setUser(currentUser);
             recordRepository.save(newRecord);
@@ -372,7 +390,8 @@ public class TelemedController {
 
 
     @GetMapping("/patientNewRecord")
-    public String patientNewData(Model model) {
+    public String patientNewData(Model model, HttpSession session) {
+        User currentUser = (User) session.getAttribute("currentUser");
         model.addAttribute("currentUser", currentUser);
 
         LocalDate currentDate = LocalDate.now();
@@ -396,20 +415,23 @@ public class TelemedController {
     }
 
     @GetMapping("/showEditRecord")
-    String showEditRecord(int id, Model model) {
+    String showEditRecord(int id, Model model, HttpSession session) {
         Record record = recordRepository.findRecordById(id);
         model.addAttribute("record", record);
+        User currentUser = (User) session.getAttribute("currentUser");
         model.addAttribute("currentUser", currentUser);
         return "patient_edit_record.html";
     }
 
     @GetMapping("/editRecord")
-    String editRecord(int id, int sysPressure, int diasPressure, int heartRate, String note, String date, String time) {
+    String editRecord(int id, int sysPressure, int diasPressure, Integer heartRate, String note, String date, String time) {
         Record record = recordRepository.findRecordById(id);
         record.setId(id);
         record.setSysPressure(sysPressure);
         record.setDiasPressure(diasPressure);
-        record.setHeartRate(heartRate);
+        if (heartRate != null) {
+            record.setHeartRate(heartRate);
+        }
         record.setNote(note);
         record.setDate(date);
         record.setTime(time);
@@ -419,23 +441,26 @@ public class TelemedController {
     }
 
     @GetMapping("/searchPatient")
-    public String searchPatient(@RequestParam("lname") String lname, Model model) {
+    public String searchPatient(@RequestParam("lname") String lname, Model model, HttpSession session) {
         model.addAttribute(userRepository.findByLname(lname));
+        User currentUser = (User) session.getAttribute("currentUser");
         model.addAttribute("currentUser", currentUser);
         return "doctor_home.html";
     }
 
 
     @GetMapping("/patientEnterTherapy")
-    public String patientEnterTherapy(Model model) {
+    public String patientEnterTherapy(Model model, HttpSession session) {
+        User currentUser = (User) session.getAttribute("currentUser");
         model.addAttribute("currentUser", currentUser);
         model.addAttribute(therapyPlanRepository.findAllByUser(currentUser));
         return "patient_enter_therapy.html";
     }
 
     @GetMapping("/addNewTherapy")
-    String addNewTherapy(String name, float quantity, String dayPart, boolean iregular, User user) {
+    String addNewTherapy(String name, float quantity, String dayPart, boolean iregular, User user, HttpSession session) {
         TherapyPlan newTherapyPlan = new TherapyPlan(name, quantity, dayPart, iregular, user);
+        User currentUser = (User) session.getAttribute("currentUser");
         newTherapyPlan.setUser(currentUser);
         therapyPlanRepository.save(newTherapyPlan);
         return "redirect:/patientEnterTherapy";
@@ -448,7 +473,8 @@ public class TelemedController {
     }
 
     @GetMapping("/showEditPatientData")
-    String showEditUserData(Model model) {
+    String showEditUserData(Model model, HttpSession session) {
+        User currentUser = (User) session.getAttribute("currentUser");
         User user = currentUser;
         model.addAttribute("user", user);
         model.addAttribute("currentUser", currentUser);
@@ -456,7 +482,9 @@ public class TelemedController {
     }
 
     @GetMapping("/editPatientData")
-    String editUserData(String fname, String lname, String birthday, int mbo, String number, String email, Model model) {
+    String editUserData(String fname, String lname, String birthday, int mbo, String number, String email, Model model,
+                        HttpSession session) {
+        User currentUser = (User) session.getAttribute("currentUser");
         User user = currentUser;
         user.setFname(fname);
         user.setLname(lname);

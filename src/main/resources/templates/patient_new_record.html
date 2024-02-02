@@ -73,15 +73,15 @@
                 <div class="form-group row">
                     <div class="col-12">
                         <label for="sysPressure" class="col-form-label">Sistolički(gornji) tlak:</label>
-                        <input type="number" class="form-control" id="sysPressure" name="sysPressure" placeholder="Unesite izmjereni sistolički tlak (mmHg)" min="70" max="200" required>
+                        <input type="number" class="form-control" id="sysPressure" name="sysPressure" placeholder="Unesite izmjereni sistolički tlak (mmHg)" min="60" max="260" required>
                     </div>
                     <div class="col-12">
                         <label for="diasPressure" class="col-form-label">Dijastolički(donji) tlak:</label>
-                        <input type="number" class="form-control" id="diasPressure" name="diasPressure" placeholder="Unesite izmjereni dijastolički tlak (mmHg)" min="45" max="120" required>
+                        <input type="number" class="form-control" id="diasPressure" name="diasPressure" placeholder="Unesite izmjereni dijastolički tlak (mmHg)" min="30" max="180" required>
                     </div>
                     <div class="col-12">
                         <label for="heartRate" class="col-form-label">Puls:</label>
-                        <input type="number" class="form-control" id="heartRate" name="heartRate" placeholder="Unesite izmjereni broj otkucaja srca (u minuti)" min="5" max="250" required>
+                        <input type="number" class="form-control" id="heartRate" name="heartRate" placeholder="Unesite izmjereni broj otkucaja srca (u minuti)" min="5" max="250">
                     </div>
                     <div class="regular-therapy">
                         <div class="d-flex justify-content-left align-items-center form-check form-switch form-group">
@@ -111,7 +111,7 @@
                     <div class="therapy-menu" style="display: none;">
                         <div class="col-12">
                             <label for="name" class="col-form-label">Naziv lijeka:</label>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Unesite naziv lijeka" pattern="[a-zA-ZčćžšđČĆŽŠĐ-]+" disabled>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Unesite naziv lijeka" pattern="[a-zA-ZčćžšđČĆŽŠĐ0-9 \-]+" disabled>
                         </div>
                         <div class="col-12">
                             <label for="quantity" class="col-form-label">Količina:</label>
@@ -124,7 +124,7 @@
                     </div>
                     <div class="col-12">
                         <label for="date" class="col-form-label">Datum:</label>
-                        <input type="date" th:value="${currentDate}" class="form-control" id="date" name="date">
+                        <input type="date" th:value="${currentDate}" class="form-control" id="date" name="date" min="2024-01-31">
                     </div>
                     <div class="col-12">
                         <label for="time" class="col-form-label">Vrijeme:</label>

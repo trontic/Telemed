@@ -42,7 +42,7 @@
                             <label for="fname" class="col-form-label">Ime:</label>
                         </div>
                         <div class="col-9">
-                            <input type="text" class="form-control" id="fname" name="fname" placeholder="Unesite ime pacijenta" pattern="[a-zA-ZčćžšđČĆŽŠĐ-]+" required>
+                            <input type="text" class="form-control" id="fname" name="fname" placeholder="Unesite ime pacijenta" pattern="[A-Za-zčćžšđČĆŽŠĐ\- ]+" required>
                         </div>
                     </div>
                     <div class="row mt-4 mb-4">
@@ -50,7 +50,7 @@
                             <label for="lname" class="col-form-label">Prezime:</label>
                         </div>
                         <div class="col-9">
-                            <input type="text" class="form-control" id="lname" name="lname" placeholder="Unesite prezime pacijenta" pattern="[a-zA-ZčćžšđČĆŽŠĐ-]+" required>
+                            <input type="text" class="form-control" id="lname" name="lname" placeholder="Unesite prezime pacijenta" pattern="[A-Za-zčćžšđČĆŽŠĐ\- ]+" required>
                         </div>
                     </div>
                     <div class="row mt-4 mb-4">
@@ -74,7 +74,7 @@
                             <label for="number" class="col-form-label">Broj mobitela:</label>
                         </div>
                         <div class="col-9">
-                            <input type="text" class="form-control" id="number" name="number" placeholder="Unesite broj mobitela" pattern="^\+?([0-9]{1,3})?[-. ]?(\([0-9]{1,3}\)|[0-9]{1,3})[-. ]?([0-9]{1,4})[-. ]?([0-9]{1,4})[-. ]?([0-9]{1,4})$" required>
+                            <input type="text" class="form-control" id="number" name="number" placeholder="Unesite broj mobitela" pattern="(\+385|00385)?\d{8,10}" required>
                         </div>
                     </div>
                     <div class="row mt-4 mb-4">
@@ -82,7 +82,7 @@
                             <label for="email" class="col-form-label">Email:</label>
                         </div>
                         <div class="col-9">
-                            <input type="email" class="form-control" id="email" name="email" placeholder="Unesite email pacijenta" pattern="(\w\.?)+@[\w\.-]+\.\w{2,}">
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Unesite email pacijenta" pattern="(\w\.?)+@[\w\.-]+\.\w{2,}" required>
                         </div>
                     </div>
                     <div class="row mt-4 mb-4">
@@ -90,7 +90,7 @@
                             <label for="password" class="col-form-label">Lozinka:</label>
                         </div>
                         <div class="col-9">
-                            <input type="text" class="form-control" id="password" name="password" placeholder="Unesite lozinku pacijenta" minlength="3" required>
+                            <input type="text" class="form-control" id="password" name="password" placeholder="Unesite lozinku pacijenta" minlength="5" required>
                         </div>
                     </div>
                     <div class="input-group mt-5">

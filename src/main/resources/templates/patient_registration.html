@@ -36,11 +36,11 @@
                 <div class="row form-group">
                     <div class="col-12">
                         <label for="fname" class="col-form-label">Ime:</label>
-                        <input type="text" th:value="${fname}" class="form-control" id="fname" name="fname" placeholder="Ime" pattern="[a-zA-ZčćžšđČĆŽŠĐ-]+" required>
+                        <input type="text" th:value="${fname}" class="form-control" id="fname" name="fname" placeholder="Ime" pattern="[A-Za-zčćžšđČĆŽŠĐ\- ]+" required>
                     </div>
                     <div class="col-12">
                         <label for="lname" class="col-form-label">Prezime:</label>
-                        <input type="text" th:value="${lname}" class="form-control" id="lname" name="lname" placeholder="Prezime" pattern="[a-zA-ZčćžšđČĆŽŠĐ-]+" required>
+                        <input type="text" th:value="${lname}" class="form-control" id="lname" name="lname" placeholder="Prezime" pattern="[A-Za-zčćžšđČĆŽŠĐ\- ]+" required>
                     </div>
                     <div class="col-12">
                         <label for="birthday" class="col-form-label">Datum rođenja:</label>
@@ -52,11 +52,11 @@
                     </div>
                     <div class="col-12">
                         <label for="number" class="col-form-label">Broj mobitela:</label>
-                        <input type="text" th:value="${number}" class="form-control" id="number" name="number" placeholder="Broj mobitela" pattern="^\+?([0-9]{1,3})?[-. ]?(\([0-9]{1,3}\)|[0-9]{1,3})[-. ]?([0-9]{1,4})[-. ]?([0-9]{1,4})[-. ]?([0-9]{1,4})$" required>
+                        <input type="text" th:value="${number}" class="form-control" id="number" name="number" placeholder="Broj mobitela" pattern="(\+385|00385)?\d{8,10}" required>
                     </div>
                     <div class="col-12">
                         <label for="email" class="col-form-label">Email:</label>
-                        <input type="email" th:value="${email}"class="form-control" id="email" name="email" placeholder="Email" pattern="(\w\.?)+@[\w\.-]+\.\w{2,}">
+                        <input type="email" th:value="${email}"class="form-control" id="email" name="email" placeholder="Email" pattern="(\w\.?)+@[\w\.-]+\.\w{2,}" required>
                     </div>
                     <div class="col-12">
                         <label for="password" class="col-form-label">Lozinka:</label>

@@ -29,10 +29,9 @@ public class Record {
 
     }
 
-    public Record(int sysPressure, int diasPressure, int heartRate, String note, String date, String time, User user) {
+    public Record(int sysPressure, int diasPressure, String note, String date, String time, User user) {
         this.sysPressure = sysPressure;
         this.diasPressure = diasPressure;
-        this.heartRate = heartRate;
         this.note = note;
         this.date = date;
         this.time = time;

@@ -5,6 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
+
+
+
 @Entity(name="APP_USER")
 public class User {
     @Id
@@ -21,6 +24,7 @@ public class User {
     private String password;
     @Column(columnDefinition="BOOLEAN default 'FALSE'")
     private boolean passwordUpdated;
+
 
     public User() {
 

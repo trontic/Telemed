@@ -44,15 +44,15 @@
                 <div class="form-group row">
                     <div class="col-12">
                         <label for="sysPressure" class="col-form-label">Sistolički tlak:</label>
-                        <input th:value="${record.sysPressure}" type="number" class="form-control" id="sysPressure" name="sysPressure" placeholder="Unesite izmjereni sistolički tlak (mmHg)" min="70" max="200" required>
+                        <input th:value="${record.sysPressure}" type="number" class="form-control" id="sysPressure" name="sysPressure" placeholder="Unesite izmjereni sistolički tlak (mmHg)" min="60" max="260" required>
                     </div>
                     <div class="col-12">
                         <label for="diasPressure" class="col-form-label">Dijastolički tlak:</label>
-                        <input th:value="${record.diasPressure}" type="number" class="form-control" id="diasPressure" name="diasPressure" placeholder="Unesite izmjereni dijastolički tlak (mmHg)" min="45" max="120" required>
+                        <input th:value="${record.diasPressure}" type="number" class="form-control" id="diasPressure" name="diasPressure" placeholder="Unesite izmjereni dijastolički tlak (mmHg)" min="30" max="180" required>
                     </div>
                     <div class="col-12">
                         <label for="heartRate" class="col-form-label">Puls:</label>
-                        <input th:value="${record.heartRate}" type="number" class="form-control" id="heartRate" name="heartRate" placeholder="Unesite izmjereni broj otkucaja srca (u minuti)" min="5" max="250" required>
+                        <input th:value="${record.heartRate}" type="number" class="form-control" id="heartRate" name="heartRate" placeholder="Unesite izmjereni broj otkucaja srca (u minuti)" min="5" max="250">
                     </div>
                     <div class="col-12">
                         <label for="note" class="col-form-label">Bilješka:</label>
@@ -60,7 +60,7 @@
                     </div>
                     <div class="col-12">
                         <label for="date" class="col-form-label">Datum:</label>
-                        <input th:value="${record.date}" type="date" class="form-control" id="date" name="date">
+                        <input th:value="${record.date}" type="date" class="form-control" id="date" name="date" min="2024-01-31">
                     </div>
                     <div class="col-12">
                         <label for="time" class="col-form-label">Vrijeme:</label>
