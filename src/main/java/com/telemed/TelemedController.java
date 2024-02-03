@@ -7,9 +7,8 @@ import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.http.HttpSession;
 import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,9 +20,6 @@ import java.time.LocalTime;
 import java.time.chrono.ChronoLocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-
-import org.springframework.data.domain.Sort;
-
 
 
 @Controller
@@ -440,11 +436,27 @@ public class TelemedController {
         return "redirect:/records";
     }
 
+
     @GetMapping("/searchPatient")
-    public String searchPatient(@RequestParam("lname") String lname, Model model, HttpSession session) {
-        model.addAttribute(userRepository.findByLname(lname));
+    public String searchPatient(@RequestParam("name") String name, @PageableDefault(size = 10) Pageable pageable, Model model, HttpSession session) {
+        List<User> searchResults = userRepository.findByFnameContainingIgnoreCaseOrLnameContainingIgnoreCase(name, name);
+
+
+        // Manually create a Page object for pagination in the template
+        int pageSize = pageable.getPageSize();
+        int currentPage = Math.min(pageable.getPageNumber(), searchResults.size() / pageSize);
+        int totalItems = searchResults.size();
+        int totalPages = (int) Math.ceil((double) totalItems / pageSize);
+
+        Page<User> searchPage = new PageImpl<>(searchResults.subList(currentPage * pageSize, Math.min((currentPage + 1) * pageSize, totalItems)),
+                PageRequest.of(currentPage, pageSize), totalItems);
+
         User currentUser = (User) session.getAttribute("currentUser");
         model.addAttribute("currentUser", currentUser);
+        model.addAttribute("searchResults", searchPage);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("searchPhrase", name);
+
         return "doctor_home.html";
     }
 

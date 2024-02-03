@@ -43,55 +43,110 @@
             <h3>Lista pacijenata</h3>
             <form action="/searchPatient" class="row">
                 <div class="col-5 mb-2 ms-auto">
-                    <input th:text="${lname}" class="form-control" type="search" name="lname" placeholder="Pretražite pacijente po prezimenu" aria-label="Search">
+                    <input class="form-control" type="search" name="name" placeholder="Pretražite pacijente" aria-label="Search">
                 </div>
                 <div class="col-auto mb-2 me-auto">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Pretraživanje</button>
                 </div>
             </form>
-            <table id="patients" class="table table-md table-borderless table-hover align-middle">
-                <thead>
-                <tr>
-                    <th>Ime</th>
-                    <th>Prezime</th>
-                    <th>Datum rođenja</th>
-                    <th>MBO</th>
-                    <th>Broj mobitela</th>
-                    <th>Email</th>
-                    <th>Uredi</th>
-                    <!--<th>Obriši</th>-->
-                    <th>Pregledaj</th>
-                </tr>
-                </thead>
-                <tbody class="table-group-divider text-nowrap">
-                <tr th:each="user : ${userPage.content}">
-                    <td th:text="${user.fname}">Primjer</td>
-                    <td th:text="${user.lname}">Primjer</td>
-                    <td th:text="${user.birthday}">Primjer</td>
-                    <td th:text="${user.mbo}">Primjer</td>
-                    <td th:text="${user.number}">Primjer</td>
-                    <td th:text="${user.email}">Primjer</td>
-
-                    <td><a th:href="@{'/showEditPatient?id='+ ${user.id}}"><img src="images/edit.png" class="img-fluid" style="width: 20px;"></a></td>
-                    <!--<td><a th:href="@{'/deleteUser?id='+ ${user.id}}"><img src="images/trash_can.png" class="img-fluid" style="width: 20px;"></a></td>-->
-                    <td><a th:href="@{'/showPatientOverview?id='+ ${user.id}}"><img src="images/view.png" class="img-fluid" style="width: 20px;"></a></td>
-                </tr>
-                </tbody>
-            </table>
-            <div th:if="${userPage.totalPages > 1}" class="d-flex justify-content-center">
-                <ul class="pagination">
-                    <li th:if="${userPage.hasPrevious}" class="page-item">
-                        <a class="page-link" th:href="@{'/patients?page=' + ${userPage.number - 1}}">Prethodna</a>
-                    </li>
-                    <li th:each="i : ${#numbers.sequence(0, userPage.totalPages - 1)}" class="page-item"
-                        th:classappend="${i == userPage.number} ? 'active'">
-                        <a class="page-link" th:href="@{'/patients?page=' + ${i}}" th:text="${i + 1}"></a>
-                    </li>
-                    <li th:if="${userPage.hasNext}" class="page-item">
-                        <a class="page-link" th:href="@{'/patients?page=' + ${userPage.number + 1}}">Sljedeća</a>
-                    </li>
-                </ul>
+            <!-- Display search results or regular table -->
+            <div th:if="${searchResults}">
+                <table id="patients" class="table table-md table-borderless table-hover align-middle">
+                    <!-- Display search results -->
+                    <thead>
+                    <tr>
+                        <th>Ime</th>
+                        <th>Prezime</th>
+                        <th>Datum rođenja</th>
+                        <th>MBO</th>
+                        <th>Broj mobitela</th>
+                        <th>Email</th>
+                        <th>Uredi</th>
+                        <th>Pregledaj</th>
+                    </tr>
+                    </thead>
+                    <tbody class="table-group-divider text-nowrap">
+                    <tr th:each="result : ${searchResults}">
+                        <!-- Display user information as needed -->
+                        <td th:text="${result.fname}">Primjer</td>
+                        <td th:text="${result.lname}">Primjer</td>
+                        <td th:text="${result.birthday}">Primjer</td>
+                        <td th:text="${result.mbo}">Primjer</td>
+                        <td th:text="${result.number}">Primjer</td>
+                        <td th:text="${result.email}">Primjer</td>
+                        <td><a th:href="@{'/showEditPatient?id='+ ${result.id}}"><img src="images/edit.png" class="img-fluid" style="width: 20px;"></a></td>
+                        <td><a th:href="@{'/showPatientOverview?id='+ ${result.id}}"><img src="images/view.png" class="img-fluid" style="width: 20px;"></a></td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
+
+            <div th:unless="${searchResults}">
+                <!-- Display regular table -->
+                <table id="patient" class="table table-md table-borderless table-hover align-middle">
+                    <!-- Regular table content -->
+                    <thead>
+                    <tr>
+                        <th>Ime</th>
+                        <th>Prezime</th>
+                        <th>Datum rođenja</th>
+                        <th>MBO</th>
+                        <th>Broj mobitela</th>
+                        <th>Email</th>
+                        <th>Uredi</th>
+                        <th>Pregledaj</th>
+                    </tr>
+                    </thead>
+                    <tbody class="table-group-divider text-nowrap">
+                    <tr th:each="user : ${userPage.content}">
+                        <!-- Regular table content -->
+                        <td th:text="${user.fname}">Primjer</td>
+                        <td th:text="${user.lname}">Primjer</td>
+                        <td th:text="${user.birthday}">Primjer</td>
+                        <td th:text="${user.mbo}">Primjer</td>
+                        <td th:text="${user.number}">Primjer</td>
+                        <td th:text="${user.email}">Primjer</td>
+                        <td><a th:href="@{'/showEditPatient?id='+ ${user.id}}"><img src="images/edit.png" class="img-fluid" style="width: 20px;"></a></td>
+                        <td><a th:href="@{'/showPatientOverview?id='+ ${user.id}}"><img src="images/view.png" class="img-fluid" style="width: 20px;"></a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div th:if="${searchResults}">
+                <!-- Display pagination for search results -->
+                <div th:if="${totalPages > 1}" class="d-flex justify-content-center">
+                    <ul class="pagination">
+                        <li th:if="${searchResults.number > 0}" class="page-item">
+                            <a class="page-link" th:href="@{'/searchPatient?name=' + ${searchPhrase} + '&amp;page=' + ${searchResults.number - 1}}">Prethodna</a>
+                        </li>
+                        <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" class="page-item"
+                            th:classappend="${i == searchResults.number} ? 'active'">
+                            <a class="page-link" th:href="@{'/searchPatient?name=' + ${searchPhrase} + '&amp;page=' + ${i}}" th:text="${i + 1}"></a>
+                        </li>
+                        <li th:if="${searchResults.number + 1 < totalPages}" class="page-item">
+                            <a class="page-link" th:href="@{'/searchPatient?name=' + ${searchPhrase} + '&amp;page=' + ${searchResults.number + 1}}">Sljedeća</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div th:unless="${searchResults}">
+                <div th:if="${userPage.totalPages > 1}" class="d-flex justify-content-center">
+                    <ul class="pagination">
+                        <li th:if="${userPage.hasPrevious}" class="page-item">
+                            <a class="page-link" th:href="@{'/patients?page=' + ${userPage.number - 1}}">Prethodna</a>
+                        </li>
+                        <li th:each="i : ${#numbers.sequence(0, userPage.totalPages - 1)}" class="page-item"
+                            th:classappend="${i == userPage.number} ? 'active'">
+                            <a class="page-link" th:href="@{'/patients?page=' + ${i}}" th:text="${i + 1}"></a>
+                        </li>
+                        <li th:if="${userPage.hasNext}" class="page-item">
+                            <a class="page-link" th:href="@{'/patients?page=' + ${userPage.number + 1}}">Sljedeća</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
