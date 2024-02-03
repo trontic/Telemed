@@ -63,7 +63,7 @@
                     <td th:text="${record.sysPressure}">Primjer</td>
                     <td th:text="${record.diasPressure}">Primjer</td>
                     <td th:text="${record.heartRate}">Primjer</td>
-                    <td th:text="${record.note}">Primjer</td>
+                    <td th:text="${record.note}" class="truncate">Primjer</td>
                     <td><a th:href="@{'/showEditRecord?id='+ ${record.id}}"><img src="images/edit.png" class="img-fluid" style="width: 20px;"></a></td>
                     <!--<td><a th:href="@{'/deleteRecord?id='+ ${record.id}}"><img src="images/trash_can.png" class="img-fluid" style="width: 20px;"></a></td>-->
                 </tr>

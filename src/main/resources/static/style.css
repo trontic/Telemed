@@ -113,3 +113,22 @@ a{
     text-align: center;
     font-size: 19px;
 }
+
+.truncate {
+            max-width: 150px; /* Set a maximum width for the table cell */
+            white-space: nowrap; /* Prevent text from wrapping to the next line */
+            overflow: hidden; /* Hide the overflowing text */
+            text-overflow: ellipsis; /* Show an ellipsis (...) to indicate text truncation */
+        }
+.modal {
+            display: none;
+            position: fixed;
+            padding: 20px;
+            color: #6E6E6E;
+            background-color: #ECECEC;
+            border: 1px solid #ccc;
+            z-index: 1000;
+            max-width: 300px;
+            max-height: 200px;
+            overflow-y: auto;
+        }

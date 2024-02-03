@@ -81,3 +81,36 @@ function myFunction() {
       x.style.display = "block";
     }
   }
+
+
+function showFullText(event, element) {
+            // Get the full text
+            var fullText = element.textContent.trim(); // Trim removes leading and trailing whitespaces
+
+            // Check if there is content in the note field
+            if (fullText !== "") {
+                // Get mouse coordinates
+                const mouseX = event.clientX;
+                const mouseY = event.clientY;
+
+                // Create a modal element
+                var modal = document.createElement('div');
+                modal.className = 'modal';
+                modal.textContent = fullText;
+
+                 // Set modal position right of the cursor
+                 modal.style.left = mouseX + 'px';
+                 modal.style.top = mouseY + 'px';
+
+                // Append the modal to the body
+                document.body.appendChild(modal);
+
+                // Display the modal
+                modal.style.display = 'block';
+
+                // Hide the modal on mouseout
+                element.onmouseout = function () {
+                    document.body.removeChild(modal);
+                };
+            }
+        }

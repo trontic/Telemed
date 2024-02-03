@@ -125,7 +125,7 @@
                     <td th:text="${record.sysPressure}">Primjer</td>
                     <td th:text="${record.diasPressure}">Primjer</td>
                     <td th:text="${record.heartRate}">Primjer</td>
-                    <td th:text="${record.note}">Primjer</td>
+                    <td th:text="${record.note}" class="truncate" onmouseover="showFullText(event, this)">Primjer</td>
                     <input type="number" id="myElement" th:data-myvalue="${record.id}" hidden>
                     <!--<td><a><img src="images/pill.png" class="img-fluid" data-toggle="modal" data-target="#myModal" style="width: 20px;"></a></td> -->
                     <!--<td><button type="button" onclick="function()" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Prikaži</button></td>-->
