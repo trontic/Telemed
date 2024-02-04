@@ -113,3 +113,20 @@ a{
     text-align: center;
     font-size: 19px;
 }
+
+.doctor-advice-image {
+    width: 200px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+#adviceContainer {
+    height: 200px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
