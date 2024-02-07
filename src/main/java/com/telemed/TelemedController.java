@@ -3,6 +3,7 @@ package com.telemed;
 import com.telemed.model.*;
 import com.telemed.model.Record;
 import com.telemed.tools.EmailSender;
+import com.telemed.model.AdviceRepositoryDB;
 import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.http.HttpSession;
 import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
@@ -14,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 
 import javax.swing.*;
@@ -38,6 +40,9 @@ public class TelemedController {
     TherapyPlanRepositoryDB therapyPlanRepository;
     @Autowired
     TherapyRepositoryDB therapyRepository;
+    @Autowired
+    AdviceRepositoryDB adviceRepositoryDB;
+
 
     private EmailSender emailSender;
 
@@ -548,6 +553,28 @@ public class TelemedController {
         System.out.println("Korisnik " + fname + " " + lname + " je ažuriran.");
         return "redirect:/records";
     }
+
+    @GetMapping("/doctorAdvice")
+    public String showDoctorAdvice(Model model, HttpSession session) {
+        User currentUser = (User) session.getAttribute("currentUser");
+        model.addAttribute("currentUser", currentUser);
+        return "patient_advice.html";
+    }
+
+    @GetMapping("/getRandomHealthAdvice")
+    @ResponseBody
+    public String getRandomHealthAdvice() {
+        List<Advice> adviceList = (List<Advice>) adviceRepositoryDB.findAll();
+        if (!adviceList.isEmpty()) {
+            int randomIndex = new Random().nextInt(adviceList.size());
+            Advice randomAdvice = adviceList.get(randomIndex);
+            return randomAdvice.getAdvice();
+        } else {
+            return "Savjet doktora nije dostupan.";
+        }
+    }
+
+
 
     public String calculateDayPart(){
 
