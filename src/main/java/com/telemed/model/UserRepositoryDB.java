@@ -6,6 +6,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepositoryDB extends PagingAndSortingRepository<User, Integer> {
@@ -26,4 +27,7 @@ public interface UserRepositoryDB extends PagingAndSortingRepository<User, Integ
     void save(User newUser);
 
     void delete(User user);
+
+
+    Optional<Object> findById(int userId);
 }

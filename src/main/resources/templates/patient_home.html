@@ -48,10 +48,10 @@
                 <tr>
                     <th>Datum</th>
                     <th>Vrijeme</th>
-                    <th>Sistol. tlak</th>
-                    <th>Dijastol. tlak</th>
-                    <th>Puls</th>
-                    <th>Bilješka</th>
+                    <th>Sis. tlak</th>
+                    <th>Dijas. tlak</th>
+                    <!--<th>Puls</th>-->
+                    <!--<th>Bilješka</th>-->
                     <th>Uredi</th>
                     <!--<th>Obriši</th>-->
                 </tr>
@@ -62,12 +62,19 @@
                     <td th:text="${record.time}">Primjer</td>
                     <td th:text="${record.sysPressure}">Primjer</td>
                     <td th:text="${record.diasPressure}">Primjer</td>
-                    <td th:text="${record.heartRate}">Primjer</td>
-                    <td th:text="${record.note}" class="truncate">Primjer</td>
-                    <td><a th:href="@{'/showEditRecord?id='+ ${record.id}}"><img src="images/edit.png" class="img-fluid" style="width: 20px;"></a></td>
+                    <!--<td th:text="${record.heartRate}">Primjer</td>-->
+                    <!--<td th:text="${record.note}" class="truncate">Primjer</td>-->
+                    <!-- Add a class based on the date condition -->
+                    <td>
+                        <a th:href="@{'/showEditRecord?id='+ ${record.id}}" class="img-link" th:attr="data-date=${record.date}">
+                            <img src="images/edit.png" class="img-fluid" style="width: 20px;">
+                        </a>
+                    </td>
                     <!--<td><a th:href="@{'/deleteRecord?id='+ ${record.id}}"><img src="images/trash_can.png" class="img-fluid" style="width: 20px;"></a></td>-->
                 </tr>
                 </tbody>
+
+            </table>
             </table>
             <div class="d-flex justify-content-center">
                 <div th:if="${recordPage.totalPages > 1}">
@@ -88,5 +95,29 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get all elements with the class "img-link"
+        var imgLinks = document.querySelectorAll('.img-link');
+
+        // Iterate through each link and check the date condition
+        imgLinks.forEach(function(link) {
+            // Get the date attribute
+            var dateString = link.getAttribute('data-date');
+
+            // Parse the date string to a JavaScript Date object
+            var linkDate = new Date(dateString);
+
+            // Replace this with your date comparison logic
+            var currentDate = new Date();  // Current date
+
+            // Check if the date is within 7 days
+            if (currentDate.getTime() - linkDate.getTime() >= 7 * 24 * 60 * 60 * 1000) {
+                // If not within 7 days, disable the link
+                link.classList.add('disabled-link');
+            }
+        });
+    });
+</script>
 </body>
 </html>

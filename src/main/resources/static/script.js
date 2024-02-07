@@ -1,5 +1,5 @@
-const today = new Date().toISOString().split('T')[0];
-document.getElementById('date').setAttribute('max', today);
+//const today = new Date().toISOString().split('T')[0];
+//document.getElementById('date').setAttribute('max', today);
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -9,6 +9,21 @@ document.addEventListener('DOMContentLoaded', function () {
     adviceSwitch.addEventListener('change', function () {
         adviceText.style.display = this.checked ? 'block' : 'none';
     });
+
+    // Get today's date in the format YYYY-MM-DD
+        const today = new Date();
+        today.setDate(today.getDate() + 1);
+        const todayFormatted = today.toISOString().split('T')[0];
+
+        // Get yesterday's date
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 7);
+        const yesterdayFormatted = yesterday.toISOString().split('T')[0];
+
+        // Set the min and max attributes of the date input
+        document.getElementById('date').setAttribute('min', yesterdayFormatted);
+        document.getElementById('date').setAttribute('max', todayFormatted);
+
 });
 
 
@@ -114,3 +129,4 @@ function showFullText(event, element) {
                 };
             }
         }
+

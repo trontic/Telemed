@@ -8,7 +8,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
     <script src="script.js"></script>
+
     <title>eDnevnik tlaka - Pacijentovi zapisi</title>
 </head>
 <body>
@@ -106,6 +110,7 @@
                     </table>
                 </div>
             </div>
+            <div id="chartdiv"></div>
             <table id="patient" class="table table-md table-borderless table-hover align-middle">
                 <thead>
                 <tr>
@@ -115,10 +120,13 @@
                     <th>Tlak dijast.</th>
                     <th>Puls</th>
                     <th>Bilješka</th>
-                    <!--<th>Terapija</th>-->
+                    <th>Terapija</th>
+                    <th>Količina</th>
+                    <th>Vrijeme</th>
                 </tr>
                 </thead>
                 <tbody class="table-group-divider text-nowrap">
+                <!-- Iterate over each record -->
                 <tr th:each="record : ${recordPage.content}" th:class="${record.emergency} ? 'table-danger' : ''">
                     <td th:text="${record.date}">Primjer</td>
                     <td th:text="${record.time}">Primjer</td>
@@ -126,9 +134,17 @@
                     <td th:text="${record.diasPressure}">Primjer</td>
                     <td th:text="${record.heartRate}">Primjer</td>
                     <td th:text="${record.note}" class="truncate" onmouseover="showFullText(event, this)">Primjer</td>
-                    <input type="number" id="myElement" th:data-myvalue="${record.id}" hidden>
-                    <!--<td><a><img src="images/pill.png" class="img-fluid" data-toggle="modal" data-target="#myModal" style="width: 20px;"></a></td> -->
-                    <!--<td><button type="button" onclick="function()" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Prikaži</button></td>-->
+                    <!-- Check if the record has associated therapies -->
+                    <td>
+                    <span th:if="${recordTherapiesMap.containsKey(record)}">
+                    <!-- Iterate over each therapy associated with the record -->
+                        <span th:each="therapy : ${recordTherapiesMap[record]}">
+                            <span th:text="${therapy.nameMedicine}"></span>
+                        </span>
+                    </span>
+                    </td>
+                    <td><!-- Quantity column placeholder --></td>
+                    <td><!-- Time column placeholder --></td>
                 </tr>
                 </tbody>
             </table>
@@ -148,40 +164,168 @@
                 </ul>
             </div>
 
-            <div class="modal" id="myModal">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-
-                        <!-- Modal body -->
-                        <div class="modal-body">
-                            <table class="table table-striped align-middle">
-                                <thead>
-                                <tr>
-                                    <th>Naziv lijeka</th>
-                                    <th>Doza (mg)</th>
-                                    <th>Količina</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="therapy : ${therapyList}">
-                                    <td th:text="${therapy.nameMedicine}">Primjer</td>
-                                    <td th:text="${therapy.dosage}">Primjer</td>
-                                    <td th:text="${therapy.quantity}">Primjer</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-
-                    </div>
-                </div>
-            </div>
-
 
         </div>
     </div>
 </div>
+<script>
+    /**
+     * ---------------------------------------
+     * This demo was created using amCharts 5.
+     *
+     * For more information visit:
+     * https://www.amcharts.com/
+     *
+     * Documentation is available at:
+     * https://www.amcharts.com/docs/v5/
+     * ---------------------------------------
+     */
 
+    // Create root element
+    // https://www.amcharts.com/docs/v5/getting-started/#Root_element
+    var root = am5.Root.new("chartdiv");
+
+    const myTheme = am5.Theme.new(root);
+
+    // Move minor label a bit down
+    myTheme.rule("AxisLabel", ["minor"]).setAll({
+      dy: 1
+    });
+
+    // Tweak minor grid opacity
+    myTheme.rule("Grid", ["minor"]).setAll({
+      strokeOpacity: 0.08
+    });
+
+    // Set themes
+    // https://www.amcharts.com/docs/v5/concepts/themes/
+    root.setThemes([
+      am5themes_Animated.new(root),
+      myTheme
+    ]);
+
+
+    // Create chart
+    // https://www.amcharts.com/docs/v5/charts/xy-chart/
+    var chart = root.container.children.push(am5xy.XYChart.new(root, {
+      panX: false,
+      panY: false,
+      wheelX: "panX",
+      wheelY: "zoomX",
+      paddingLeft: 0
+    }));
+
+
+    // Add cursor
+    // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
+    var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {
+      behavior: "zoomX"
+    }));
+    cursor.lineY.set("visible", false);
+
+    // Create axes
+    // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+    var xAxis = chart.xAxes.push(am5xy.DateAxis.new(root, {
+      maxDeviation: 0,
+      baseInterval: {
+        timeUnit: "day",
+        count: 1
+      },
+      renderer: am5xy.AxisRendererX.new(root, {
+        minorGridEnabled: true,
+        minGridDistance: 200,
+        minorLabelsEnabled: true
+      }),
+      tooltip: am5.Tooltip.new(root, {})
+    }));
+
+    xAxis.set("minorDateFormats", {
+      day: "dd",
+      month: "MM"
+    });
+
+    var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+      renderer: am5xy.AxisRendererY.new(root, {})
+    }));
+
+
+    // Add series
+    // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+    var series = chart.series.push(am5xy.LineSeries.new(root, {
+      name: "Series",
+      xAxis: xAxis,
+      yAxis: yAxis,
+      valueYField: "value",
+      valueXField: "date",
+      tooltip: am5.Tooltip.new(root, {
+        labelText: "{valueY}"
+      })
+    }));
+
+    // Actual bullet
+    series.bullets.push(function () {
+      var bulletCircle = am5.Circle.new(root, {
+        radius: 5,
+        fill: series.get("fill")
+      });
+      return am5.Bullet.new(root, {
+        sprite: bulletCircle
+      })
+    })
+
+    // Add scrollbar
+    // https://www.amcharts.com/docs/v5/charts/xy-chart/scrollbars/
+    chart.set("scrollbarX", am5.Scrollbar.new(root, {
+      orientation: "horizontal"
+    }));
+
+    var data = [
+                 { date: '2024-02-01', value: 120 },
+                 { date: '2024-02-02', value: 130 },
+                 { date: '2024-02-03', value: 110 },
+                 { date: '2024-02-04', value: 125 },
+                 { date: '2024-02-05', value: 115 },
+                 { date: '2024-02-06', value: 105 },
+                 { date: '2024-02-07', value: 135 },
+                 { date: '2024-02-08', value: 125 },
+                 { date: '2024-02-09', value: 140 },
+                 { date: '2024-02-10', value: 130 },
+                 { date: '2024-02-11', value: 115 },
+                 { date: '2024-02-12', value: 125 },
+                 { date: '2024-02-13', value: 110 },
+                 { date: '2024-02-14', value: 120 },
+                 { date: '2024-02-15', value: 130 },
+                 { date: '2024-02-16', value: 140 },
+                 { date: '2024-02-17', value: 120 },
+                 { date: '2024-02-18', value: 110 },
+                 { date: '2024-02-19', value: 130 },
+                 { date: '2024-02-20', value: 125 },
+                 { date: '2024-02-21', value: 115 },
+                 { date: '2024-02-22', value: 135 },
+                 { date: '2024-02-23', value: 125 },
+                 { date: '2024-02-24', value: 130 },
+                 { date: '2024-02-25', value: 120 },
+                 { date: '2024-02-26', value: 110 },
+                 { date: '2024-02-27', value: 125 },
+                 { date: '2024-02-28', value: 135 },
+                 { date: '2024-02-29', value: 120 },
+                 { date: '2024-03-01', value: 130 }
+               ];
+
+    // Parse the date strings to Date objects and adjust the format
+    data.forEach(item => {
+    var parts = item.date.split('-');
+    item.date = new Date(parts[0], parts[1] - 1, parts[2]);
+    });
+
+    series.data.setAll(data);
+
+
+    // Make stuff animate on load
+    // https://www.amcharts.com/docs/v5/concepts/animations/
+    series.appear(1000);
+    chart.appear(1000, 100);
+</script>
 
 </body>
 </html>

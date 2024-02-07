@@ -12,14 +12,18 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
+import javax.swing.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.chrono.ChronoLocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -46,7 +50,7 @@ public class TelemedController {
     @GetMapping("/patients")
     public String showPatients(Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "0") int type, HttpSession session) {
         int pageSize = 10;
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.ASC, "id")); // You can change the sorting as needed
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "id")); // You can change the sorting as needed
         Page<User> userPage = userRepository.findByType(type, pageable);
         User currentUser = (User) session.getAttribute("currentUser");
         model.addAttribute("userPage", userPage);
@@ -219,11 +223,33 @@ public class TelemedController {
     String showPatientOverview(int id, Model model, @RequestParam(defaultValue = "0") int page, HttpSession session) {
         User user = userRepository.findUserById(id);
         int pageSize = 10;
-        Sort sort = Sort.by(Sort.Direction.DESC, "id");
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "id"));
+        Sort sort = Sort.by(Sort.Direction.DESC, "date");
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "date"));
+
         Page<Record> recordPage = recordRepository.findAllByUser(user, pageable);
 
+        // Create a map to store therapies for each record
+        Map<Record, List<Therapy>> recordTherapiesMap = new HashMap<>();
+
+        // Iterate over the records in the page and fetch therapies for each record
+        recordPage.forEach(record -> {
+            // Fetch all therapies associated with the record
+            List<Therapy> allTherapies = therapyRepository.findByRecord(record);
+
+            // Filter therapies where iregular field is true
+            List<Therapy> irregularTherapies = allTherapies.stream()
+                    .filter(Therapy::isIregular)
+                    .collect(Collectors.toList());
+
+            // Add the filtered therapies to the map
+            recordTherapiesMap.put(record, irregularTherapies);
+        });
+
+        // Add the fetched data to the model
         model.addAttribute("recordPage", recordPage);
+        model.addAttribute("recordTherapiesMap", recordTherapiesMap);
+        model.addAttribute("id", id); // Add user ID to use in the view
+        ;
         User currentUser = (User) session.getAttribute("currentUser");
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("user", user);
@@ -236,6 +262,11 @@ public class TelemedController {
     @GetMapping("/login")
     public String login() {
         return "login.html";
+    }
+
+    @GetMapping("/graph")
+    public String graph() {
+        return "graph.html";
     }
 
     @GetMapping("/")
@@ -289,14 +320,17 @@ public class TelemedController {
 
 
     @GetMapping("/records")
-    public String records(Model model, @RequestParam(defaultValue = "0") int page, HttpSession session) {
+    public String records(Model model, @RequestParam(defaultValue = "0") int page, Record record, HttpSession session) {
         int pageSize = 10;
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "id"));
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "date"));
         User currentUser = (User) session.getAttribute("currentUser");
         Page<Record> recordPage = recordRepository.findAllByUser(currentUser, pageable);
 
+
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("recordPage", recordPage);
+
+
         return "patient_home.html";
     }
 
@@ -394,8 +428,9 @@ public class TelemedController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         model.addAttribute("currentDate", currentDate.format(formatter));
         LocalTime currentTime = LocalTime.now();
+        LocalTime currentTimePlusOneHour = currentTime.plusHours(1);
         DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("HH:mm");
-        model.addAttribute("currentTime", currentTime.format(formatter2));
+        model.addAttribute("currentTime", currentTimePlusOneHour.format(formatter2));
 
 
         List<TherapyPlan> therapyPlanList = therapyPlanRepository.findByUserAndDayPart(currentUser, calculateDayPart());
@@ -416,6 +451,11 @@ public class TelemedController {
         model.addAttribute("record", record);
         User currentUser = (User) session.getAttribute("currentUser");
         model.addAttribute("currentUser", currentUser);
+        // Calculate seven days ago
+        LocalDate sevenDaysAgo = LocalDate.now().minusDays(7);
+
+        // Add the attribute to the Thymeleaf model
+        model.addAttribute("sevenDaysAgo", sevenDaysAgo);
         return "patient_edit_record.html";
     }
 
