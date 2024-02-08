@@ -1,10 +1,12 @@
 package com.telemed;
 
+import com.lowagie.text.DocumentException;
 import com.telemed.model.*;
 import com.telemed.model.Record;
 import com.telemed.tools.EmailSender;
 import com.telemed.model.AdviceRepositoryDB;
 import io.micrometer.common.util.StringUtils;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 import javax.swing.*;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.chrono.ChronoLocalDate;
