@@ -2,6 +2,7 @@ package com.telemed.model;
 
 public class ChartDataDTO {
     private String date;
+    private String time;
     private int sysPressure;
     private int diasPressure;
 
@@ -9,8 +10,9 @@ public class ChartDataDTO {
     }
 
     // Constructor with parameters
-    public ChartDataDTO(String date, int sysPressure, int diasPressure ) {
+    public ChartDataDTO(String date, String time, int sysPressure, int diasPressure ) {
         this.date = date;
+        this.time = time;
         this.sysPressure = sysPressure;
         this.diasPressure = diasPressure;
 
@@ -24,6 +26,14 @@ public class ChartDataDTO {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public int getSysPressure() {

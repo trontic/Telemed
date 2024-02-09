@@ -21,6 +21,6 @@ public interface RecordRepositoryDB extends CrudRepository<Record, Integer>, Pag
 
     Page<Record> findAllByUser(User currentUser, Pageable pageable);
 
-    @Query("SELECT new com.telemed.model.ChartDataDTO(r.date, r.sysPressure, r.diasPressure) FROM Record r WHERE r.user = :user")
+    @Query("SELECT new com.telemed.model.ChartDataDTO(r.date, r.time, r.sysPressure, r.diasPressure) FROM Record r WHERE r.user = :user")
     List<ChartDataDTO> findChartDataByUser(@Param("user") User user);
 }
