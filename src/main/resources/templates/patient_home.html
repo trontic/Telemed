@@ -180,6 +180,12 @@
       // Transform the date into Unix time type
       var unixTime = new Date(item.date).getTime();
 
+      // Check if this is not the first item and the date is the same as the previous item
+      if (index > 0 && item.date === data[index - 1].date) {
+        // Increment the date by a small fraction to make it distinct
+        unixTime += (index % 10) * 10800000; // Adjust the fraction as needed
+      }
+
       // Push the transformed data to the chartData array for systolic pressure
       chartData.push({
         date: unixTime,
