@@ -226,35 +226,42 @@
     fetch('/api/chart/data?userId=' + userId)
       .then(response => response.json())
       .then(data => {
-      data.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-        // Log the fetched data to console for debugging
-        console.log('Fetched data:', data);
+        // Sort the data by combining date and time and converting them into Unix time
+        data.sort((a, b) => {
+          var combinedDateTimeA = new Date(a.date + "T" + a.time).getTime();
+          var combinedDateTimeB = new Date(b.date + "T" + b.time).getTime();
+          return combinedDateTimeA - combinedDateTimeB;
+        });
 
-        // Initialize an empty array to store the processed data
+        // Log the sorted data to console for debugging
+        console.log('Sorted data:', data);
+
+        // Initialize empty arrays to store processed data for systolic and diastolic pressures
         var chartData = [];
         var chartDataDiastolic = [];
 
-        // Iterate over each item in the fetched data
-        data.forEach((item, index) => {
-          // Transform the date into Unix time type
-          var unixTime = new Date(item.date).getTime();
-
-          // Check if this is not the first item and the date is the same as the previous item
-          if (index > 0 && item.date === data[index - 1].date) {
-            // Increment the date by a small fraction to make it distinct
-            unixTime += (index % 10) * 10800000; // Adjust the fraction as needed
-          }
+        // Iterate over each item in the sorted data
+        data.forEach(item => {
+          // Combine date and time strings into a single string and convert to Unix time
+          var combinedDateTime = new Date(item.date + "T" + item.time).getTime();
 
           // Push the transformed data to the chartData arrays for both systolic and diastolic pressures
           chartData.push({
-            date: unixTime,
+            date: combinedDateTime,
             value: item.sysPressure // Adjust this based on your data structure
           });
           chartDataDiastolic.push({
-            date: unixTime,
+            date: combinedDateTime,
             diastolicValue: item.diasPressure // Adjust this based on your data structure
           });
         });
+
+        // Further processing or visualization of chartData and chartDataDiastolic
+      })
+      .catch(error => {
+        console.error('Error fetching chart data:', error);
+      });
+
 
         // Set the chart data for both systolic and diastolic pressures
         series.data.setAll(chartData);
