@@ -171,31 +171,33 @@
     // Log the fetched data to console for debugging
     console.log('Fetched data:', data);
 
-    // Initialize an empty array to store the processed data
+    // Initialize empty arrays to store processed data for systolic and diastolic pressures
     var chartData = [];
+    var chartDataDiastolic = [];
 
     // Iterate over each item in the sorted data
     data.forEach((item, index) => {
       // Transform the date into Unix time type
       var unixTime = new Date(item.date).getTime();
 
-      // Check if this is not the first item and the date is the same as the previous item
-      if (index > 0 && item.date === data[index - 1].date) {
-        // Increment the date by a small fraction to make it distinct
-        unixTime += (index % 10) * 10800000; // Adjust the fraction as needed
-      }
-
-      // Push the transformed data to the chartData array
+      // Push the transformed data to the chartData array for systolic pressure
       chartData.push({
         date: unixTime,
         value: item.sysPressure // Adjust this based on your data structure
       });
+
+      // Push the transformed data to the chartDataDiastolic array for diastolic pressure
+      chartDataDiastolic.push({
+        date: unixTime,
+        diastolicValue: item.diasPressure // Adjust this based on your data structure
+      });
     });
 
-    // Set the chart data to the processed chartData array
-    chart.data = chartData;
-    console.log('Transformed data:', chart.data);
-    series.data.setAll(chart.data);
+    // Set the chart data for systolic pressure
+    series.data.setAll(chartData);
+
+    // Set the chart data for diastolic pressure
+    seriesDiastolic.data.setAll(chartDataDiastolic);
 
   })
   .catch(error => {

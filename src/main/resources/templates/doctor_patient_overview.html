@@ -221,7 +221,8 @@
     }));
     cursor.lineY.set("visible", false);
 
-    var userId = [[${user.id}]];
+    var userId = [[${currentUser.id}]];
+    console.log('User ID:', userId);
     // Fetch data for both systolic and diastolic pressures
     fetch('/api/chart/data?userId=' + userId)
   .then(response => response.json())
@@ -232,31 +233,33 @@
     // Log the fetched data to console for debugging
     console.log('Fetched data:', data);
 
-    // Initialize an empty array to store the processed data
+    // Initialize empty arrays to store processed data for systolic and diastolic pressures
     var chartData = [];
+    var chartDataDiastolic = [];
 
     // Iterate over each item in the sorted data
     data.forEach((item, index) => {
       // Transform the date into Unix time type
       var unixTime = new Date(item.date).getTime();
 
-      // Check if this is not the first item and the date is the same as the previous item
-      if (index > 0 && item.date === data[index - 1].date) {
-        // Increment the date by a small fraction to make it distinct
-        unixTime += (index % 10) * 10800000; // Adjust the fraction as needed
-      }
-
-      // Push the transformed data to the chartData array
+      // Push the transformed data to the chartData array for systolic pressure
       chartData.push({
         date: unixTime,
         value: item.sysPressure // Adjust this based on your data structure
       });
+
+      // Push the transformed data to the chartDataDiastolic array for diastolic pressure
+      chartDataDiastolic.push({
+        date: unixTime,
+        diastolicValue: item.diasPressure // Adjust this based on your data structure
+      });
     });
 
-    // Set the chart data to the processed chartData array
-    chart.data = chartData;
-    console.log('Transformed data:', chart.data);
-    series.data.setAll(chart.data);
+    // Set the chart data for systolic pressure
+    series.data.setAll(chartData);
+
+    // Set the chart data for diastolic pressure
+    seriesDiastolic.data.setAll(chartDataDiastolic);
 
   })
   .catch(error => {
@@ -352,12 +355,33 @@ xAxis.set("minorDateFormats", {
 
 
 
-
-
     // Make stuff animate on load
     // https://www.amcharts.com/docs/v5/concepts/animations/
     series.appear(1000);
     chart.appear(1000, 100);
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get all elements with the class "img-link"
+        var imgLinks = document.querySelectorAll('.img-link');
+
+        // Iterate through each link and check the date condition
+        imgLinks.forEach(function(link) {
+            // Get the date attribute
+            var dateString = link.getAttribute('data-date');
+
+            // Parse the date string to a JavaScript Date object
+            var linkDate = new Date(dateString);
+
+            // Replace this with your date comparison logic
+            var currentDate = new Date();  // Current date
+
+            // Check if the date is within 7 days
+            if (currentDate.getTime() - linkDate.getTime() >= 7 * 24 * 60 * 60 * 1000) {
+                // If not within 7 days, disable the link
+                link.classList.add('disabled-link');
+            }
+        });
+    });
 </script>
 
 </body>
