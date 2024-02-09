@@ -119,6 +119,10 @@
                             <label for="quantity" class="col-form-label">Količina:</label>
                             <input type="number" step="any" class="form-control" id="quantity" name="quantity" placeholder="Unesite količinu" min="0.01" max="10" disabled>
                         </div>
+                        <div class="col-12">
+                            <label for="time_med" class="col-form-label">Vrijeme konzumacije:</label>
+                            <input type="time" th:value="${currentTime}" class="form-control" id="time_med" name="time_med">
+                        </div>
                     </div>
                     <div class="col-12">
                         <label for="note" class="col-form-label">Bilješka:</label>
@@ -129,7 +133,7 @@
                         <input type="date" th:value="${currentDate}" class="form-control" id="date" name="date">
                     </div>
                     <div class="col-12">
-                        <label for="time" class="col-form-label">Vrijeme:</label>
+                        <label for="time" class="col-form-label">Vrijeme mjerenja:</label>
                         <input type="time" th:value="${currentTime}" class="form-control" id="time" name="time">
                     </div>
                     <div class="input-group mt-4">

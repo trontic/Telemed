@@ -6,6 +6,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
     <script src="script.js"></script>
     <title>eDnevnik tlaka - Početna stranica</title>
 </head>
@@ -45,6 +48,7 @@
             <div class="row mb-2 custom-color fs-6">
                 <span>Napomena: Prije nego što krenete unositi Vaše rezultate mjerenja tlaka, molimo Vas da unesete svoju kroničnu terapiju.</span>
             </div>
+            <div id="chartdiv"></div>
             <table id="patients" class="table table-md table-borderless table-hover align-middle">
                 <thead>
                 <tr>
@@ -98,6 +102,201 @@
     </div>
 </div>
 <script>
+
+    /**
+     * ---------------------------------------
+     * This demo was created using amCharts 5.
+     *
+     * For more information visit:
+     * https://www.amcharts.com/
+     *
+     * Documentation is available at:
+     * https://www.amcharts.com/docs/v5/
+     * ---------------------------------------
+     */
+
+
+
+    // Create root element
+    // https://www.amcharts.com/docs/v5/getting-started/#Root_element
+    var root = am5.Root.new("chartdiv");
+
+    const myTheme = am5.Theme.new(root);
+
+    // Move minor label a bit down
+    myTheme.rule("AxisLabel", ["minor"]).setAll({
+      dy: 1
+    });
+
+    // Tweak minor grid opacity
+    myTheme.rule("Grid", ["minor"]).setAll({
+      strokeOpacity: 0.08
+    });
+
+    // Set themes
+    // https://www.amcharts.com/docs/v5/concepts/themes/
+    root.setThemes([
+      am5themes_Animated.new(root),
+      myTheme
+    ]);
+
+
+    // Create chart
+    // https://www.amcharts.com/docs/v5/charts/xy-chart/
+    var chart = root.container.children.push(am5xy.XYChart.new(root, {
+      panX: false,
+      panY: false,
+      wheelX: "panX",
+      wheelY: "zoomX",
+      paddingLeft: 0
+    }));
+
+
+    // Add cursor
+    // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
+    var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {
+      behavior: "zoomX"
+    }));
+    cursor.lineY.set("visible", false);
+
+    var userId = [[${currentUser.id}]];
+    console.log('User ID:', userId);
+    // Fetch data for both systolic and diastolic pressures
+    fetch('/api/chart/data?userId=' + userId)
+      .then(response => response.json())
+      .then(data => {
+        // Log the fetched data to console for debugging
+        console.log('Fetched data:', data);
+
+        // Initialize an empty array to store the processed data
+        var chartData = [];
+        var chartDataDiastolic = [];
+
+        // Iterate over each item in the fetched data
+        data.forEach((item, index) => {
+          // Transform the date into Unix time type
+          var unixTime = new Date(item.date).getTime();
+
+          // Check if this is not the first item and the date is the same as the previous item
+          if (index > 0 && item.date === data[index - 1].date) {
+            // Increment the date by a small fraction to make it distinct
+            unixTime += (index % 10) * 10800000; // Adjust the fraction as needed
+          }
+
+          // Push the transformed data to the chartData arrays for both systolic and diastolic pressures
+          chartData.push({
+            date: unixTime,
+            value: item.sysPressure // Adjust this based on your data structure
+          });
+          chartDataDiastolic.push({
+            date: unixTime,
+            diastolicValue: item.diasPressure // Adjust this based on your data structure
+          });
+        });
+
+        // Set the chart data for both systolic and diastolic pressures
+        series.data.setAll(chartData);
+        seriesDiastolic.data.setAll(chartDataDiastolic);
+
+      })
+      .catch(error => {
+        console.error('Error fetching chart data:', error);
+      });
+
+
+    // Create axes
+    // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+    var xAxis = chart.xAxes.push(am5xy.DateAxis.new(root, {
+  maxDeviation: 0,
+  baseInterval: {
+    timeUnit: "hour",
+    count: 3 // Set the number of hours as the interval
+  },
+  renderer: am5xy.AxisRendererX.new(root, {
+    minorGridEnabled: true,
+    minGridDistance: 200,
+    minorLabelsEnabled: true
+  }),
+  tooltip: am5.Tooltip.new(root, {})
+}));
+
+// Format for main intervals (3 hours)
+xAxis.set("dateFormats", {
+  hour: "MM-dd HH:mm" // Format for hours, minutes, month, and date
+});
+
+// Format for minor intervals (hours and minutes)
+xAxis.set("minorDateFormats", {
+  hour: "HH:mm" // Format for hours and minutes
+});
+
+    var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+      renderer: am5xy.AxisRendererY.new(root, {})
+    }));
+
+
+    // Add series
+    // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+    var series = chart.series.push(am5xy.LineSeries.new(root, {
+      name: "Series",
+      xAxis: xAxis,
+      yAxis: yAxis,
+      valueYField: "value",
+      valueXField: "date",
+      tooltip: am5.Tooltip.new(root, {
+        labelText: "{valueY}"
+      })
+    }));
+
+    // Add series for diastolic pressure
+    var seriesDiastolic = chart.series.push(am5xy.LineSeries.new(root, {
+      name: "Diastolic",
+      xAxis: xAxis,
+      yAxis: yAxis,
+      valueYField: "diastolicValue",
+      valueXField: "date",
+      tooltip: am5.Tooltip.new(root, {
+        labelText: "{valueY}"
+      })
+    }));
+
+
+    // Actual bullet
+    series.bullets.push(function () {
+      var bulletCircle = am5.Circle.new(root, {
+        radius: 5,
+        fill: series.get("fill")
+      });
+      return am5.Bullet.new(root, {
+        sprite: bulletCircle
+      })
+    })
+
+    // Actual bullet for diastolic series
+    seriesDiastolic.bullets.push(function () {
+      var bulletCircle = am5.Circle.new(root, {
+        radius: 5,
+        fill: seriesDiastolic.get("fill")
+      });
+      return am5.Bullet.new(root, {
+        sprite: bulletCircle
+      })
+    });
+
+
+    // Add scrollbar
+    // https://www.amcharts.com/docs/v5/charts/xy-chart/scrollbars/
+    chart.set("scrollbarX", am5.Scrollbar.new(root, {
+      orientation: "horizontal"
+    }));
+
+
+
+    // Make stuff animate on load
+    // https://www.amcharts.com/docs/v5/concepts/animations/
+    series.appear(1000);
+    chart.appear(1000, 100);
+
     document.addEventListener('DOMContentLoaded', function() {
         // Get all elements with the class "img-link"
         var imgLinks = document.querySelectorAll('.img-link');

@@ -233,26 +233,30 @@ public class TelemedController {
     String showPatientOverview(int id, Model model, @RequestParam(defaultValue = "0") int page, HttpSession session) {
         User user = userRepository.findUserById(id);
         int pageSize = 10;
-        Sort sort = Sort.by(Sort.Direction.DESC, "date");
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "date"));
+
+        // Create a composite sort object to sort by both date and time in descending order
+        Sort sort = Sort.by(
+                Sort.Order.desc("date"),
+                Sort.Order.desc("time")
+        );
+
+        // Create the pageable object with the composite sort
+        Pageable pageable = PageRequest.of(page, pageSize, sort);
 
         Page<Record> recordPage = recordRepository.findAllByUser(user, pageable);
 
-        // Create a map to store therapies for each record
-        Map<Record, List<Therapy>> recordTherapiesMap = new HashMap<>();
+        // Create a map to store irregular therapies for each record
+        Map<Record, Therapy> recordTherapiesMap = new HashMap<>();
 
-        // Iterate over the records in the page and fetch therapies for each record
+        // Iterate over the records in the page and fetch irregular therapies for each record
         recordPage.forEach(record -> {
-            // Fetch all therapies associated with the record
-            List<Therapy> allTherapies = therapyRepository.findByRecord(record);
+            // Fetch the irregular therapy associated with the record
+            Therapy irregularTherapy = therapyRepository.findFirstByRecordAndIregularIsTrue(record);
 
-            // Filter therapies where iregular field is true
-            List<Therapy> irregularTherapies = allTherapies.stream()
-                    .filter(Therapy::isIregular)
-                    .collect(Collectors.toList());
-
-            // Add the filtered therapies to the map
-            recordTherapiesMap.put(record, irregularTherapies);
+            // Add the irregular therapy to the map if it exists
+            if (irregularTherapy != null) {
+                recordTherapiesMap.put(record, irregularTherapy);
+            }
         });
 
         // Add the fetched data to the model
@@ -332,7 +336,15 @@ public class TelemedController {
     @GetMapping("/records")
     public String records(Model model, @RequestParam(defaultValue = "0") int page, Record record, HttpSession session) {
         int pageSize = 10;
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "date"));
+
+        // Create a composite sort object to sort by both date and time in descending order
+        Sort sort = Sort.by(
+                Sort.Order.desc("date"),
+                Sort.Order.desc("time")
+        );
+
+        // Create the pageable object with the composite sort
+        Pageable pageable = PageRequest.of(page, pageSize, sort);
         User currentUser = (User) session.getAttribute("currentUser");
         Page<Record> recordPage = recordRepository.findAllByUser(currentUser, pageable);
 
@@ -350,6 +362,7 @@ public class TelemedController {
                         @RequestParam("date") String date, @RequestParam("time") String time, User user,
                         @RequestParam(value = "selectedTherapyPlanIds", required = false) List<Integer> selectedIds,
                         @RequestParam(value = "name", required = false) String name,
+                        @RequestParam(value = "time_med") String time_med,
                         @RequestParam(value = "quantity", required = false) Float quantity,
                         @RequestParam(value = "emergencyCheck", required = false) boolean emergencyCheck,
                         @RequestParam(value = "iregularCheck", required = false) boolean iregularCheck,
@@ -418,7 +431,7 @@ public class TelemedController {
             newTherapy.setNameMedicine(name);
             newTherapy.setQuantity(quantity);
             newTherapy.setDayPart(null);
-            newTherapy.setTime(time);
+            newTherapy.setTime(time_med);
             newTherapy.setIregular(true);
             newTherapy.setUser(currentUser);
             newTherapy.setRecord(newRecord);

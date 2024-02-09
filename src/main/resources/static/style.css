@@ -120,7 +120,7 @@ a{
             overflow: hidden; /* Hide the overflowing text */
             text-overflow: ellipsis; /* Show an ellipsis (...) to indicate text truncation */
         }
-.modal {
+.modal-note {
             display: none;
             position: fixed;
             padding: 20px;

@@ -110,7 +110,7 @@ function showFullText(event, element) {
 
                 // Create a modal element
                 var modal = document.createElement('div');
-                modal.className = 'modal';
+                modal.className = 'modal-note';
                 modal.textContent = fullText;
 
                  // Set modal position right of the cursor
