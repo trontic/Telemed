@@ -167,6 +167,7 @@
       .then(data => {
         // Log the fetched data to console for debugging
         console.log('Fetched data:', data);
+        data.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
         // Initialize an empty array to store the processed data
         var chartData = [];

@@ -226,6 +226,7 @@
     fetch('/api/chart/data?userId=' + userId)
       .then(response => response.json())
       .then(data => {
+      data.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
         // Log the fetched data to console for debugging
         console.log('Fetched data:', data);
 
