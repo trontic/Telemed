@@ -221,7 +221,7 @@
     }));
     cursor.lineY.set("visible", false);
 
-    var userId = [[${currentUser.id}]];
+    var userId = [[${user.id}]];
     console.log('User ID:', userId);
     // Fetch data for both systolic and diastolic pressures
     fetch('/api/chart/data?userId=' + userId)
