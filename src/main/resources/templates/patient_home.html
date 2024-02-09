@@ -163,45 +163,44 @@
     console.log('User ID:', userId);
     // Fetch data for both systolic and diastolic pressures
     fetch('/api/chart/data?userId=' + userId)
-      .then(response => response.json())
-      .then(data => {
-        // Log the fetched data to console for debugging
-        console.log('Fetched data:', data);
+  .then(response => response.json())
+  .then(data => {
+    // Sort the data array by time in ascending order
+    data.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-        // Initialize an empty array to store the processed data
-        var chartData = [];
-        var chartDataDiastolic = [];
+    // Log the fetched data to console for debugging
+    console.log('Fetched data:', data);
 
-        // Iterate over each item in the fetched data
-        data.forEach((item, index) => {
-          // Transform the date into Unix time type
-          var unixTime = new Date(item.date).getTime();
+    // Initialize an empty array to store the processed data
+    var chartData = [];
 
-          // Check if this is not the first item and the date is the same as the previous item
-          if (index > 0 && item.date === data[index - 1].date) {
-            // Increment the date by a small fraction to make it distinct
-            unixTime += (index % 10) * 10800000; // Adjust the fraction as needed
-          }
+    // Iterate over each item in the sorted data
+    data.forEach((item, index) => {
+      // Transform the date into Unix time type
+      var unixTime = new Date(item.date).getTime();
 
-          // Push the transformed data to the chartData arrays for both systolic and diastolic pressures
-          chartData.push({
-            date: unixTime,
-            value: item.sysPressure // Adjust this based on your data structure
-          });
-          chartDataDiastolic.push({
-            date: unixTime,
-            diastolicValue: item.diasPressure // Adjust this based on your data structure
-          });
-        });
+      // Check if this is not the first item and the date is the same as the previous item
+      if (index > 0 && item.date === data[index - 1].date) {
+        // Increment the date by a small fraction to make it distinct
+        unixTime += (index % 10) * 10800000; // Adjust the fraction as needed
+      }
 
-        // Set the chart data for both systolic and diastolic pressures
-        series.data.setAll(chartData);
-        seriesDiastolic.data.setAll(chartDataDiastolic);
-
-      })
-      .catch(error => {
-        console.error('Error fetching chart data:', error);
+      // Push the transformed data to the chartData array
+      chartData.push({
+        date: unixTime,
+        value: item.sysPressure // Adjust this based on your data structure
       });
+    });
+
+    // Set the chart data to the processed chartData array
+    chart.data = chartData;
+    console.log('Transformed data:', chart.data);
+    series.data.setAll(chart.data);
+
+  })
+  .catch(error => {
+    console.error('Error fetching chart data:', error);
+  });
 
 
     // Create axes
